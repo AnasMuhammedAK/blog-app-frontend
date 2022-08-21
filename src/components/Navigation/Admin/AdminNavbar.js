@@ -10,6 +10,8 @@ import {
   LogoutIcon,
 } from "@heroicons/react/outline";
 import { PlusIcon } from "@heroicons/react/solid";
+import { useDispatch } from "react-redux";
+import { logoutUserAction } from "../../../redux/slices/users/usersSlice";
 
 const navigation = [
   { name: "Home", href: "/", current: true },
@@ -30,7 +32,7 @@ const AdminNavbar = () => {
     { name: "Your Profile", href: `/profile` },
     { name: "Change your password", href: "/update-password" },
   ];
-
+  const dispatch = useDispatch()
   return (
     <Disclosure as="nav" className="bg-gray-800 py-3">
       {({ open }) => (
@@ -88,6 +90,7 @@ const AdminNavbar = () => {
                   </Link>
                   {/* Logout */}
                   <button
+                  onClick={() => dispatch(logoutUserAction())}
                     type="button"
                     className="relative inline-flex items-center mx-2 px-4 py-2 border shadow-sm text-sm font-medium rounded-md text-white bg-transparent hover:bg-gray-700 focus:outline-none focus:ring-2   focus:ring-green-400"
 

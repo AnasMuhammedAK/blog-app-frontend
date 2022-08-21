@@ -19,13 +19,12 @@ const navigation = [
 function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
 }
-
 const PublicNavbar = () => {
   return (
-    <Disclosure as="nav" className="bg-black py-3">
+    <Disclosure as="nav" className="fixed top-0 right-0 left-0 z-10 bg-black py-3 ">
       {({ open }) => (
         <>
-          <div className="max-w-[1850px] mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="max-w-[1850px] mx-auto px-4 sm:px-6 lg:px-8 ">
             <div className="flex justify-between h-16">
               <div className="flex">
                 <div className="-ml-2 mr-2 flex items-center md:hidden">

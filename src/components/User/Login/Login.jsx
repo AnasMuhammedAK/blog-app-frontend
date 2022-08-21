@@ -134,6 +134,9 @@ const Login = () => {
                     <div className="text-red-400 mb-2">
                       {formik.touched.password && formik.errors.password}
                     </div>
+                      <div className="mx-2 mb-3 ">
+                        <span onClick={()=> navigate('/forgotPassword')} className=" text-blue-400 hover:text-blue-600 cursor-pointer">Forgot password?</span>
+                      </div>
                     {/* Login btn */}
                     <button
                       type="submit"

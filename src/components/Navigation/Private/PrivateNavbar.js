@@ -9,6 +9,8 @@ import {
   XIcon,
 } from "@heroicons/react/outline";
 import { PlusIcon, LogoutIcon } from "@heroicons/react/solid";
+import { useDispatch } from "react-redux";
+import { logoutUserAction } from "../../../redux/slices/users/usersSlice";
 
 const navigation = [
   { name: "Home", href: "/", current: true },
@@ -26,7 +28,7 @@ const PrivateNavbar = ({ isLogin }) => {
     { name: "Your Profile", href: `/profile` },
     { name: "Change your password", href: "/update-password" },
   ];
-
+const dispatch = useDispatch()
   return (
     <Disclosure as="nav" className="bg-black py-3">
       {({ open }) => (
@@ -47,7 +49,7 @@ const PrivateNavbar = ({ isLogin }) => {
                 </div>
                 <div className="flex-shrink-0 flex items-center">
                   {/* Logo */}
-                  <img className="h-20 w-25 "  src={Logo}/>
+                  <img alt="logo"className="h-20 w-25 "  src={Logo}/>
                 </div>
                 <div className="hidden md:ml-6 md:flex md:items-center md:space-x-4">
                   {navigation.map(item => (
@@ -81,6 +83,7 @@ const PrivateNavbar = ({ isLogin }) => {
                   </Link>
 
                   <button
+                  onClick={() => dispatch(logoutUserAction())}
                     type="button"
                     className="relative inline-flex items-center px-4 py-2 border shadow-sm text-sm font-medium rounded-md text-white bg-transparent hover:bg-gray-700 focus:outline-none focus:ring-2   focus:ring-green-400"
                   >

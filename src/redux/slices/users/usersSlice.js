@@ -38,8 +38,22 @@ async(user, { rejectWithValue, getState, dispatch }) => {
         return rejectWithValue(error?.response?.data)
     }
 })
+//---------------------------------------------------
+//Logout Action
+//---------------------------------------------------
+export const logoutUserAction = createAsyncThunk('users/logout',
+async(payload, { rejectWithValue, getState, dispatch }) => {
+try {
+    localStorage.removeItem("userInfo")
+} catch (error) {
+    if (!error?.response) throw error
+    return rejectWithValue(error?.response?.data)
+}
+})
+
 //get user from localStorage to store
 const userFromLocalStorage = localStorage.getItem('userInfo') ? JSON.parse(localStorage.getItem('userInfo')) : null
+
 //create user slices
 const usersSlice = createSlice({
     name: 'users',
@@ -92,6 +106,13 @@ const usersSlice = createSlice({
                 state.serverErr = action.error.message
                 state.userAuth = null
             })
+        //logout
+            .addCase(logoutUserAction.fulfilled, (state) => {
+                state.loading = false
+                state.userAuth = null
+                state.appErr = undefined
+                state.serverErr = undefined
+              })
 
     },
 

@@ -3,7 +3,7 @@ import poster from "../../images/home.png";
 const HomePage = () => {
   return (
     <>
-      <section style={{height: '100vh'}} className=" contrast-more: pb-10 pt-32 bg-slate-100">
+      <section  className="h-screen contrast-more: pb-10 pt-32 bg-slate-100">
         <div className="relative container px-4   mx-auto">
           <div className="flex flex-wrap items-center -mx-4 mb-10 2xl:mb-14">
             <div className="w-full lg:w-1/2 px-4 mb-16 lg:mb-0">
