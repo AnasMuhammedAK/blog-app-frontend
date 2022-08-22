@@ -1,9 +1,10 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import { useNavigate } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
 import { registerUserAction } from "../../../redux/slices/users/usersSlice";
+import OtpForm from "../../otpInput/OtpInput";
 
 //Form Schema 
 const nameRegex = /^[a-zA-Z ]*$/
@@ -19,6 +20,8 @@ const formSchema = Yup.object({
 //Register
 //-------------------------------
 const Register = () => {
+  const [open , setOpen] = useState(false)
+  
   //dispatch
   const dispatch = useDispatch()
   const navigate = useNavigate()
@@ -33,6 +36,7 @@ const Register = () => {
     onSubmit: values => {
       console.log(values);
       //dispath the action
+      setOpen(true)
       dispatch(registerUserAction(values));
       
     },
@@ -42,13 +46,13 @@ const Register = () => {
   const storeData = useSelector(store => store.users)
   const { loading, appErr, serverErr, userAuth } = storeData
 
-  useEffect(() => {
+  // useEffect(() => {
 
-    //redired when registered
-    if(userAuth){
-     navigate('/profile')
-   }
-  }, [userAuth])
+  //   //redired when registered
+  //   if(userAuth){
+  //    navigate('/profile')
+  //  }
+  // }, [userAuth])
   
 
 
@@ -324,6 +328,7 @@ const Register = () => {
           </div>
         </div>
       </div>
+      <OtpForm open={ open }  setOpen={ setOpen }  />
     </section>
   );
 };
