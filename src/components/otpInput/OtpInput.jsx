@@ -26,8 +26,14 @@ const OtpForm = ({ open, setOpen }) => {
             const { data } = await axios.post(`${baseURL}/api/users/verifyotp`, { otp: state.otp, id: user._id, phone: user.phone })
             console.log(data.message)
             toast(data.message)
-            alert(data.message)
-           setStatus(true)
+            //alert(data.message)
+            if(data.status){
+                setStatus(true)
+                
+            }else{
+                setOpen(true)
+            }
+           
         } catch (error) {
             if (error.response) {
                 console.log(error.response.data.error)
@@ -89,7 +95,6 @@ const OtpForm = ({ open, setOpen }) => {
                                 </div>
                             </div>
                         </div>
-                        <ToastContainer />
                     </div>
                    
                 </>

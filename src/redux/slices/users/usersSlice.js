@@ -1,23 +1,13 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
-import axios from 'axios'
-import { baseURL } from '../../../utils/baseURL'
+import usersServiece from './usersService'
 
-// header setup
-const config = {
-    headers: {
-        "content-type": "application/json",
-    }
-}
 //---------------------------------------------------
 //register action
 //---------------------------------------------------
 export const registerUserAction = createAsyncThunk('users/register',
     async (user, { rejectWithValue, getState, dispatch }) => {
         try {
-            const { data } = await axios.post(`${baseURL}/api/users/register`, user, config)
-            //SAVE USER INTO LOCAL STORAGE
-        localStorage.setItem('userInfo',JSON.stringify(data))
-            return data
+            return await usersServiece.register(user)
         } catch (error) {
             if (!error?.response) throw error
             return rejectWithValue(error?.response?.data)
@@ -29,10 +19,7 @@ export const registerUserAction = createAsyncThunk('users/register',
 export const loginUserAction = createAsyncThunk('users/login',
 async(user, { rejectWithValue, getState, dispatch }) => {
     try {
-        const { data } = await axios.post(`${baseURL}/api/users/login`, user, config)
-        //SAVE USER INTO LOCAL STORAGE
-        localStorage.setItem('userInfo', JSON.stringify(data))
-        return data
+        return await usersServiece.login(user)
     } catch (error) {
         if (!error?.response) throw error
         return rejectWithValue(error?.response?.data)
@@ -44,7 +31,8 @@ async(user, { rejectWithValue, getState, dispatch }) => {
 export const logoutUserAction = createAsyncThunk('users/logout',
 async(payload, { rejectWithValue, getState, dispatch }) => {
 try {
-    localStorage.removeItem("userInfo")
+    const { refreshToken } = JSON.parse(localStorage.getItem('tokens'))
+  return await usersServiece.logout(refreshToken)
 } catch (error) {
     if (!error?.response) throw error
     return rejectWithValue(error?.response?.data)

@@ -1,5 +1,6 @@
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
+import { ToastContainer } from 'react-toastify';
 import ForgotPassword from './components/forgotPassword/ForgotPassword';
 import ResetPassword from './components/forgotPassword/ResetPassword';
 import HomePage from './components/HomePage/HomePage';
@@ -10,16 +11,17 @@ import Register from './components/User/Register/Register';
 
 function App() {
   return (
-   <Router>
-    <Navbar/>
-    <Routes>
-      <Route path='/' element={<HomePage/>}/>
-      <Route path='/register' element={<Register/>}/>
-      <Route path='/login' element={<Login/>}/>
-      <Route path='/forgotPassword' element={<ForgotPassword/>}/>
-      <Route path='/resetPassword/:token' element={<ResetPassword/>}/>
-    </Routes>
-   </Router>
+    <Router>
+      <ToastContainer />
+      <Navbar />
+      <Routes>
+        <Route path='/' element={<HomePage />} />
+        <Route path='/register' element={<Register />} />
+        <Route path='/login' element={<Login />} />
+        <Route path='/forgotPassword' element={<ForgotPassword />} />
+        <Route path='/resetPassword/:token' element={<ResetPassword />} />
+      </Routes>
+    </Router>
   );
 }
 
