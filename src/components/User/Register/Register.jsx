@@ -1,10 +1,13 @@
 import React, { useEffect, useState } from "react";
 import { useFormik } from "formik";
 import * as Yup from "yup";
+import jwtDecode from 'jwt-decode'
 import { useNavigate } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
 import { registerUserAction } from "../../../redux/slices/users/usersSlice";
 import OtpForm from "../../otpInput/OtpInput";
+import { GoogleLogin } from '@react-oauth/google';
+import { toast } from "react-toastify";
 
 //Form Schema 
 const nameRegex = /^[a-zA-Z ]*$/
@@ -20,8 +23,8 @@ const formSchema = Yup.object({
 //Register
 //-------------------------------
 const Register = () => {
-  const [open , setOpen] = useState(false)
-  
+  const [open, setOpen] = useState(false)
+
   //dispatch
   const dispatch = useDispatch()
   const navigate = useNavigate()
@@ -38,7 +41,7 @@ const Register = () => {
       //dispath the action
       setOpen(true)
       dispatch(registerUserAction(values));
-      
+
     },
     validationSchema: formSchema,
   });
@@ -46,18 +49,39 @@ const Register = () => {
   const storeData = useSelector(store => store.users)
   const { loading, appErr, serverErr, userAuth } = storeData
 
-  // useEffect(() => {
+  useEffect(() => {
 
-  //   //redired when registered
-  //   if(userAuth){
-  //    navigate('/profile')
-  //  }
-  // }, [userAuth])
-  
+    //redired when registered
+    const userInfo = JSON.parse(localStorage.getItem('userInfo'))
+    if(userInfo){
+     // toast("successfully registered")
+     navigate('/')
+   }
+  }, [])
 
+  //handle register with google
+//   const googleSuccess = ( res ) => {
+// console.log(res);
+//   }
+//   const googleFailure = ( ) => {
+//     console.log('google registration failed ,  try again later')
+//   }
+// const loginWithGoogle = useGoogleLogin({
+//   onSuccess: tokenResponse => console.log(tokenResponse),
+// });
+const createOrGetUser = async(response) => {
+  const decoded = jwtDecode(response.credential)
+  const userData = {
+      fullName: decoded.name,
+      email: decoded.email,
+      password: decoded.sub,
+  }
+  dispatch(registerUserAction(userData))
+  console.log(userData)
+  }
 
   return (
-    <section style={{height:'100vh%'}} className="relative py-20 2xl:py-40 bg-slate-100 overflow-hidden">
+    <section style={{ height: '100vh%' }} className="relative py-20 2xl:py-40 bg-slate-100 overflow-hidden">
       <div className="relative container px-4 mx-auto">
         <div className="max-w-5xl mx-auto">
           <div className="flex flex-wrap items-center -mx-4">
@@ -79,7 +103,7 @@ const Register = () => {
                     {/* display error message */}
                     {appErr || serverErr ? <div className="text-red-400">
                       {serverErr} - {appErr}
-                    </div>  : null}
+                    </div> : null}
                   </h3>
 
                   {/* Full name */}
@@ -210,7 +234,7 @@ const Register = () => {
                           fill="black"
                         ></path>
                         <rect
-                          x="15"
+                          x="15"OR
                           y="15"
                           width="5"
                           height="1"
@@ -276,22 +300,51 @@ const Register = () => {
                   </div>
 
                   <div className="inline-flex mb-10"></div>
-               
-                {loading ?  <button
+
+                  {loading ? <button
                     disabled
                     className="py-4 w-full bg-gray-500  text-white font-bold rounded-full transition duration-200"
                   >
                     Loading...
-                  </button> :  <button
+                  </button> : <button
                     type="submit"
                     className="py-4 w-full bg-blue-500 hover:bg-blue-600 text-white font-bold rounded-full transition duration-200"
                   >
                     Register
-                  </button>}   
-                  <div className="text-center mt-3 mb-3"> OR </div>
+                  </button>}
+                 
                   <div>
                     <div className=" space-y-2">
-                      <button
+                      {/* <GoogleLogin
+                        clientId="jfdsjfdjfdfd"
+                        render={(renderProps) => {
+                          (
+                            <button
+                            onClick={renderProps.onClick}
+                            disabled = {renderProps.disabled}
+                              aria-label="Login with Google"
+                              type="button"
+                              className="flex items-center justify-center w-full py-4 space-x-4 border rounded-full focus:ring-2  border-gray-400 focus:ring-blue-500"
+                            >
+                              <svg
+                                xmlns="http://www.w3.org/2000/svg"
+                                viewBox="0 0 32 32"
+                                className="w-5 h-5 fill-current"
+                              >
+                                <path d="M16.318 13.714v5.484h9.078c-0.37 2.354-2.745 6.901-9.078 6.901-5.458 0-9.917-4.521-9.917-10.099s4.458-10.099 9.917-10.099c3.109 0 5.193 1.318 6.38 2.464l4.339-4.182c-2.786-2.599-6.396-4.182-10.719-4.182-8.844 0-16 7.151-16 16s7.156 16 16 16c9.234 0 15.365-6.49 15.365-15.635 0-1.052-0.115-1.854-0.255-2.651z"></path>
+                              </svg>
+                              <p>Register with Google</p>
+                            </button>
+                          )
+                        }}
+                        onSuccess = {googleSuccess}
+                        onFailure = {googleFailure}
+                        cookiePolicy = "single_host_origin"
+                      /> */}
+                     
+                       
+                      {/* <button
+                      onClick={loginWithGoogle}
                         aria-label="Login with Google"
                         type="button"
                         className="flex items-center justify-center w-full py-4 space-x-4 border rounded-full focus:ring-2  border-gray-400 focus:ring-blue-500"
@@ -304,7 +357,7 @@ const Register = () => {
                           <path d="M16.318 13.714v5.484h9.078c-0.37 2.354-2.745 6.901-9.078 6.901-5.458 0-9.917-4.521-9.917-10.099s4.458-10.099 9.917-10.099c3.109 0 5.193 1.318 6.38 2.464l4.339-4.182c-2.786-2.599-6.396-4.182-10.719-4.182-8.844 0-16 7.151-16 16s7.156 16 16 16c9.234 0 15.365-6.49 15.365-15.635 0-1.052-0.115-1.854-0.255-2.651z"></path>
                         </svg>
                         <p>Register with Google</p>
-                      </button>
+                      </button> */}
                       {/* <button
                             aria-label="Login with Facebook"
                             role="button"
@@ -323,12 +376,28 @@ const Register = () => {
                   </div>
 
                 </form>
+                 {/* login with google */}
+                 <h1 className="text-center mt-3"> OR </h1>
+                  <div className="w-full mt-3 flex items-center justify-center">
+                  <GoogleLogin
+                  size= "large"
+                  theme= ""
+                  text= "signup_with"
+                      onSuccess={(response) => {
+                        createOrGetUser(response)
+                      }}
+                      onError = {() => {
+                        console.log('Error with google login');
+                        toast('Error with google Signup');
+                      }}
+                       />
+                  </div>
               </div>
             </div>
           </div>
         </div>
       </div>
-      <OtpForm open={ open }  setOpen={ setOpen }  />
+      <OtpForm open={open} setOpen={setOpen} />
     </section>
   );
 };

@@ -1,12 +1,11 @@
-import React,{useEffect} from "react";
+import React,{useEffect,useState} from "react";
 import { useFormik } from "formik";
 import * as Yup from "yup";
+import jwtDecode from 'jwt-decode'
 import { useSelector, useDispatch } from "react-redux";
 import { loginUserAction } from "../../../redux/slices/users/usersSlice";
 import { useNavigate } from "react-router-dom";
-
-
-
+import { GoogleLogin } from '@react-oauth/google';
 
 //Form schema
 const phoneRegExp = /^((\\+[1-9]{1,4}[ \\-]*)|(\\([0-9]{2,3}\\)[ \\-]*)|([0-9]{2,4})[ \\-]*)*?[0-9]{3,4}?[ \\-]*[0-9]{3,4}?$/
@@ -18,6 +17,7 @@ const formSchema = Yup.object({
 const Login = () => {
   const dispatch = useDispatch()
   const navigate = useNavigate()
+  const [googleAuth, setGoogleAuth] = useState('')
   //formik
   const formik = useFormik({
     initialValues: {
@@ -40,10 +40,20 @@ const Login = () => {
 
    //redired when registered
    if(userAuth){
-    navigate('/profile')
+    navigate('/')
   }
  }, [userAuth])
- 
+
+ const createOrGetUser = async(response) => {
+  const decoded = jwtDecode(response.credential)
+  const userData = {
+      fullName: decoded.name,
+      email: decoded.email,
+      password: decoded.sub,
+  }
+  dispatch(loginUserAction(userData))
+  console.log(userData)
+  }
    
   return (
     <>
@@ -66,6 +76,7 @@ const Login = () => {
                       {serverErr} - {appErr}
                     </div>  : null}
                     </h3>
+                    
                     <div className="flex items-center pl-6 mb-3 border border-gray-200 bg-white rounded-full">
                       <span className="inline-block pr-3 border-r border-gray-100">
                         <svg
@@ -145,8 +156,25 @@ const Login = () => {
                       Login
                     </button>
                   </form>
+                  {/* login with google */}
+                  <h1 className="text-center mt-3"> OR </h1>
+                  <div className="w-full mt-3 flex items-center justify-center">
+                  <GoogleLogin
+                  size= "large"
+                  theme= ""
+                  text= "signin_with"
+                      onSuccess={(response) => {
+                        
+                        createOrGetUser(response)
+                      }}
+                      onError = {() => {
+                        console.log('Error with google login');
+                      }}
+                       />
+                  </div>
                 </div>
               </div>
+              
               <div className="w-full lg:w-3/5 px-4 mb-16 lg:mb-0 order-first lg:order-last">
                 <span className="flex mb-10 mx-auto items-center justify-center h-20 w-20 bg-blue-500 rounded-lg">
                   <svg

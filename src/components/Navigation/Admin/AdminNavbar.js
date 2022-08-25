@@ -34,7 +34,7 @@ const AdminNavbar = () => {
   ];
   const dispatch = useDispatch()
   return (
-    <Disclosure as="nav" className="bg-gray-800 py-3">
+    <Disclosure as="nav" className="fixed top-0 right-0 left-0 z-10 bg-gray-800 py-3">
       {({ open }) => (
         <>
           <div className="max-w-[1850px] mx-auto px-4 sm:px-6 lg:px-8">
