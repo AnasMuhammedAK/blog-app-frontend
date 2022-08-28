@@ -1,9 +1,9 @@
-import axios from 'axios'
+
 import React, {useState} from 'react'
 import { useParams } from 'react-router-dom'
-import { baseURL } from '../../utils/baseURL'
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import publicAxios from '../../utils/publicAxios';
 
 const notify =async (alert) => await toast(alert)
 function ResetPassword() {
@@ -19,7 +19,7 @@ function ResetPassword() {
        
         try {
             
-            const { data } = await axios.post(`${baseURL}/api/users/resetpassword`,{password,token:token})
+            const { data } = await publicAxios.post(`/api/users/resetpassword`,{password,token:token})
             console.log(data)
             setMsg(data.message)
             setError("")

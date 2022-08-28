@@ -27,8 +27,8 @@ const PrivateNavbar = ({ isLogin }) => {
   const userNavigation = [
     { name: "Your Profile", href: `/profile` },
     { name: "Change your password", href: "/update-password" },
-  ];
-const dispatch = useDispatch()
+  ]
+  const dispatch = useDispatch()
   return (
     <Disclosure as="nav" className="fixed top-0 right-0 left-0 z-10 bg-black py-3">
       {({ open }) => (
@@ -49,7 +49,7 @@ const dispatch = useDispatch()
                 </div>
                 <div className="flex-shrink-0 flex items-center">
                   {/* Logo */}
-                  <img alt="logo"className="h-20 w-25 "  src={Logo}/>
+                  <img alt="logo" className="h-20 w-25 " src={Logo} />
                 </div>
                 <div className="hidden md:ml-6 md:flex md:items-center md:space-x-4">
                   {navigation.map(item => (
@@ -83,7 +83,7 @@ const dispatch = useDispatch()
                   </Link>
 
                   <button
-                  onClick={() => dispatch(logoutUserAction())}
+                    onClick={() => dispatch(logoutUserAction())}
                     type="button"
                     className="relative inline-flex items-center px-4 py-2 border shadow-sm text-sm font-medium rounded-md text-white bg-transparent hover:bg-gray-700 focus:outline-none focus:ring-2   focus:ring-green-400"
                   >

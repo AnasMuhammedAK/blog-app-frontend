@@ -1,11 +1,10 @@
-import axios from 'axios'
-import axiosInstance, { baseURL } from '../../../utils/baseURL'
-
+import privateAxios from '../../../utils/privateAxios'
+import publicAxios from '../../../utils/publicAxios'
 
 //REGISTER USER
 //-------------------------------------------------------------
 const register = async (userData) => {
-    const { data } = await axios.post(`${baseURL}/api/users/register`, userData)
+    const { data } = await publicAxios.post(`/api/users/register`, userData)
     //SAVE USER INTO LOCAL STORAGE
     if (data){
         localStorage.setItem('userInfo', JSON.stringify(data))
@@ -16,7 +15,7 @@ const register = async (userData) => {
 //LOGIN USER
 //-------------------------------------------------------------
 const login = async (userData) => {
-    const { data } = await axios.post(`${baseURL}/api/users/login`, userData)
+    const { data } = await publicAxios.post(`/api/users/login`, userData)
     //SAVE USER INTO LOCAL STORAGE
     if (data){
         localStorage.setItem('userInfo', JSON.stringify(data))
@@ -32,7 +31,7 @@ const logout = async (refreshToken) => {
     //         Authorization: `Bearer ${accessToken}`, 
     //     },
     // }
-   const { data } =  await axiosInstance.post(`/api/users/logout`, { refreshToken })
+   const { data } =  await privateAxios.post(`/api/users/logout`, { refreshToken })
    if(data.status) {
     localStorage.removeItem('userInfo')
     localStorage.removeItem('tokens')

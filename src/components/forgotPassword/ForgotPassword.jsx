@@ -1,9 +1,9 @@
 
-import axios from 'axios'
+
 import React, { useState } from 'react'
-import { baseURL } from '../../utils/baseURL'
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import publicAxios from '../../utils/publicAxios';
 const notify = (alert) => toast(alert)
 
 function ForgotPassword() {
@@ -14,7 +14,7 @@ function ForgotPassword() {
     const handleSubmit = async (e) => {
         e.preventDefault()
         try {
-            const { data } = await axios.post(`${baseURL}/api/users/forgotPassword`, { email })
+            const { data } = await publicAxios.post(`/api/users/forgotPassword`, { email })
             console.log(data.message)
             setMsg(data.message)
             setError("")

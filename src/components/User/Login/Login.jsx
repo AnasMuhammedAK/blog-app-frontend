@@ -71,11 +71,13 @@ const Login = () => {
                     <h3 className="mb-10 text-2xl text-center font-bold font-heading">
                       {/* Header */}
                       Login to your Account
-                      {/* display error message */}
+                    </h3>
+                    <h1 className="mb-5 text-center">
+                    {/* display error message */}
                     {appErr || serverErr ? <div className="text-red-400">
                       {serverErr} - {appErr}
-                    </div>  : null}
-                    </h3>
+                    </div> : null}
+                  </h1>
                     
                     <div className="flex items-center pl-6 mb-3 border border-gray-200 bg-white rounded-full">
                       <span className="inline-block pr-3 border-r border-gray-100">

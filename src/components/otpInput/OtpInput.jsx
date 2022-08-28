@@ -1,10 +1,10 @@
-import axios from 'axios';
+
 import React, { useState, useEffect } from 'react';
 import OtpInput from 'react-otp-input';
-import { baseURL } from '../../utils/baseURL';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { useNavigate } from 'react-router-dom';
+import publicAxios from '../../utils/publicAxios';
 
 
 
@@ -23,7 +23,7 @@ const OtpForm = ({ open, setOpen }) => {
         setOpen(false)
 
         try {
-            const { data } = await axios.post(`${baseURL}/api/users/verifyotp`, { otp: state.otp, id: user._id, phone: user.phone })
+            const { data } = await publicAxios.post(`/api/users/verifyotp`, { otp: state.otp, id: user._id, phone: user.phone })
             console.log(data.message)
             toast(data.message)
             //alert(data.message)
@@ -45,7 +45,7 @@ const OtpForm = ({ open, setOpen }) => {
 
         //redired when registered
         if (status) {
-            navigate('/profile')
+            navigate('/')
         }
     }, [status])
     return (

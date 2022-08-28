@@ -98,13 +98,16 @@ const createOrGetUser = async(response) => {
             <div className="w-full lg:w-1/2 px-4">
               <div className="px-6 lg:px-20 py-8 lg:py-12 bg-[#DEF7E5] rounded-2xl">
                 <form onSubmit={formik.handleSubmit}>
-                  <h3 className="mb-10 text-2xl text-center text-black font-bold font-heading">
+                  <h3 className="mb-5 text-2xl text-center text-black font-bold font-heading">
                     Register Account
+                    
+                  </h3>
+                  <h1 className="mb-5 text-center">
                     {/* display error message */}
                     {appErr || serverErr ? <div className="text-red-400">
                       {serverErr} - {appErr}
                     </div> : null}
-                  </h3>
+                  </h1>
 
                   {/* Full name */}
                   <div className="flex items-center pl-6 mb-3 bg-white rounded-full">

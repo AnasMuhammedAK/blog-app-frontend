@@ -1,6 +1,6 @@
 import axios from 'axios'
 import jwt_decode from "jwt-decode";
-export const baseURL = 'http://localhost:5000'
+const baseURL = 'http://localhost:5000'
 
 
 const axiosInstance = axios.create({baseURL: baseURL})
@@ -19,7 +19,7 @@ const generateRefreshToken = async () => {
 
 axiosInstance.interceptors.request.use(
     async (config) => {
-        const {accessToken } = JSON.parse(localStorage.getItem('tokens'))
+        const { accessToken } = JSON.parse(localStorage.getItem('tokens'))
         let currentDate = new Date();
         const decodedToken = jwt_decode(accessToken);
         if (decodedToken.exp * 1000 < currentDate.getTime()) {
