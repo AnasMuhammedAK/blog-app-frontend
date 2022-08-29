@@ -3,21 +3,25 @@ import { useDispatch, useSelector } from "react-redux";
 import { useEffect } from "react";
 import { PencilAltIcon } from "@heroicons/react/outline";
 import { fetchAllCategories } from "../../redux/slices/Category/categorySlice";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import DateFormater from "../../utils/DateFormater";
-
+import LoadingSpinner from '../../components/LoadingSpinner/LoadingSpinner';
 const CategoryList = () => {
+  const category = useSelector(state => state?.category);
+  const {userAuth} = useSelector(state => state?.users);
+  const { categoryList, loading, appErr, serverErr } = category
+const navigate = useNavigate()
   const dispatch = useDispatch();
   useEffect(() => {
     dispatch(fetchAllCategories());
-  }, [dispatch])
-  const category = useSelector(state => state?.category);
-  const { categoryList, loading, appErr, serverErr } = category
+    if(!userAuth) navigate('/')
+  }, [dispatch,userAuth])
+  
 
   return (
     <>
       {loading ? (
-        <h2 className="text-center text-3xl text-green-800">Loading</h2>
+        <LoadingSpinner />
       ) : appErr || serverErr ? (
         <h2 className="text-center text-3xl text-red-600">
           {serverErr} {serverErr}
@@ -38,7 +42,7 @@ const CategoryList = () => {
                         scope="col"
                         className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
                       >
-                        Author
+                        AuthoruserAuth
                       </th>
                       <th
                         scope="col"

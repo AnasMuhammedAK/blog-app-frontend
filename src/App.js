@@ -11,6 +11,7 @@ import { GoogleOAuthProvider } from '@react-oauth/google';
 import AddNewCategory from './components/Categories/AddNewCategory';
 import CategoryList from './components/Categories/CategoryList';
 
+
 function App() {
   return (
     <GoogleOAuthProvider clientId ={process.env.REACT_APP_GOOGLE_CLIENT_ID}>
