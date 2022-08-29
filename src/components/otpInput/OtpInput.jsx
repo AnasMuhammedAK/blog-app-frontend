@@ -31,6 +31,7 @@ const OtpForm = ({ open, setOpen }) => {
                 setStatus(true)
                 
             }else{
+                setState({ otp:'' })
                 setOpen(true)
             }
            

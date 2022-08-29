@@ -9,7 +9,7 @@ import {
   XIcon,
 } from "@heroicons/react/outline";
 import { PlusIcon, LogoutIcon } from "@heroicons/react/solid";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { logoutUserAction } from "../../../redux/slices/users/usersSlice";
 
 const navigation = [
@@ -29,6 +29,7 @@ const PrivateNavbar = ({ isLogin }) => {
     { name: "Change your password", href: "/update-password" },
   ]
   const dispatch = useDispatch()
+  const { userAuth } = useSelector(state => state?.users)
   return (
     <Disclosure as="nav" className="fixed top-0 right-0 left-0 z-10 bg-black py-3">
       {({ open }) => (
@@ -104,7 +105,7 @@ const PrivateNavbar = ({ isLogin }) => {
                             <span className="sr-only">Open user menu</span>
                             <img
                               className=" h-10 w-10 rounded-full"
-                              // src={isLogin?.profilePhoto}
+                               src={userAuth?.profilePhoto}
                               alt=""
                             />
                           </Menu.Button>
