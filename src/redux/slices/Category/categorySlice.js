@@ -7,13 +7,17 @@ export const createCategory = createAsyncThunk("category/create",
         try {
             return await categoryService.create(category)
         } catch (error) {
-            const message =
-                (error.response &&
-                    error.response.data &&
-                    error.response.data.message) ||
-                error.message ||
-                error.toString()
-            return rejectWithValue(message)
+            if (!error?.response) throw error
+            return rejectWithValue(error?.response?.data)
+        }
+    })
+    export const fetchAllCategories = createAsyncThunk("category/fetchall",
+    async (nothing, { rejectWithValue, getState, dispatch }) => {
+        try {
+            return await categoryService.fetchAll()
+        } catch (error) {
+            if (!error?.response) throw error
+            return rejectWithValue(error?.response?.data)
         }
     })
 
@@ -27,6 +31,7 @@ const categorySlices = createSlice({
     initialState,
     extraReducers: (builder) => {
         builder
+        //create a new category
             .addCase(createCategory.pending, (state, action) => {
                 state.loading = true
             })
@@ -42,6 +47,23 @@ const categorySlices = createSlice({
                 state.appErr = action.payload.message
                 state.serverErr = action.error.message
 
+            })
+            //fetch All Categories
+            .addCase(fetchAllCategories.pending, (state, action) => {
+                state.loading = true
+                
+            })
+            .addCase(fetchAllCategories.fulfilled, (state, action) => {
+                state.loading = false
+                state.categoryList = action.payload
+                state.appErr = undefined
+                state.serverErr = undefined
+            })
+            .addCase(fetchAllCategories.rejected, (state, action) => {
+                state.loading = false
+                state.categoryList = undefined
+                state.appErr = action.payload.message
+                state.serverErr = action.error.message
             })
     }
 })

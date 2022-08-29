@@ -9,7 +9,9 @@ const formSchema = Yup.object({
   title: Yup.string().matches(titleRegex, 'Only alphabetic characters are allowed').max(50, 'Must be 50 characters or less').required('Title is required'),
 })
 const AddNewCategory = () => {
-
+// take state from store
+const { appErr,serverErr} = useSelector(state => state.category)
+console.log(appErr, serverErr)
     //dispatch
     const dispatch = useDispatch()
     //formik
@@ -38,6 +40,9 @@ const AddNewCategory = () => {
             <p className="font-medium text-indigo-600 hover:text-indigo-500">
               These are the categories user will select when creating a post
             </p>
+            { (appErr || serverErr) ?
+            <h1 className="mt-2 text-center text-sm text-red-500 ">{serverErr} - {appErr}</h1>
+             : null}
           </p>
         </div>
         {/* Form */}

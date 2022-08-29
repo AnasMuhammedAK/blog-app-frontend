@@ -9,6 +9,7 @@ import Login from './components/User/Login/Login';
 import Register from './components/User/Register/Register';
 import { GoogleOAuthProvider } from '@react-oauth/google';
 import AddNewCategory from './components/Categories/AddNewCategory';
+import CategoryList from './components/Categories/CategoryList';
 
 function App() {
   return (
@@ -23,6 +24,7 @@ function App() {
           <Route path='/forgotPassword' element={<ForgotPassword />} />
           <Route path='/resetPassword/:token' element={<ResetPassword />} />
           <Route path='/add-category' element={<AddNewCategory />} />
+          <Route path='/category-list' element={<CategoryList />} />
         </Routes>
       </Router>
     </GoogleOAuthProvider>
