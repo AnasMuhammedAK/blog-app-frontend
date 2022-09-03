@@ -1,3 +1,4 @@
+import { toast } from 'react-toastify'
 import privateAxios from '../../../utils/privateAxios'
 import publicAxios from '../../../utils/publicAxios'
 
@@ -6,11 +7,15 @@ import publicAxios from '../../../utils/publicAxios'
 const register = async (userData) => {
     const { data } = await publicAxios.post(`/api/users/register`, userData)
     //SAVE USER INTO LOCAL STORAGE
-    if (data){
+    if (data.isSuccess){
         localStorage.setItem('userInfo', JSON.stringify(data))
         localStorage.setItem('tokens', JSON.stringify({accessToken:data.accessToken, refreshToken:data.refreshToken}))
+        return data
+    }else{
+toast('Not registered, something wents wrong')
+return null
     }
-    return data
+    
 }
 //LOGIN USER
 //-------------------------------------------------------------
@@ -20,8 +25,9 @@ const login = async (userData) => {
     if (data){
         localStorage.setItem('userInfo', JSON.stringify(data))
         localStorage.setItem('tokens', JSON.stringify({accessToken:data.accessToken, refreshToken:data.refreshToken}))
+        return data
     }
-    return data
+    
 }
 //LOGOUT USER
 //-------------------------------------------------------------
@@ -31,6 +37,7 @@ const logout = async (refreshToken) => {
     //         Authorization: `Bearer ${accessToken}`, 
     //     },
     // }
+ 
    const { data } =  await privateAxios.post(`/api/users/logout`, { refreshToken })
    if(data.status) {
     localStorage.removeItem('userInfo')

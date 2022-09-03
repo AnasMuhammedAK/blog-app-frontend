@@ -1,6 +1,6 @@
 import { PlusCircleIcon, BookOpenIcon } from "@heroicons/react/solid";
 import { useDispatch, useSelector } from 'react-redux'
-import  { createCategory } from '../../redux/slices/Category/categorySlice'
+import  { createCategory} from '../../redux/slices/Category/categorySlice'
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import LoadingSpinner from "../LoadingSpinner/LoadingSpinner";
@@ -32,9 +32,10 @@ console.log(appErr, serverErr)
       },
       validationSchema: formSchema,
     });
+    
     useEffect(()=>{
-      if(!userAuth) navigate('/')
-    },[userAuth]);
+      //if(!userAuth.isAdmin) navigate('/home')
+         },[]);
   return (
     <>
     { loading ?( <LoadingSpinner />) : (

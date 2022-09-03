@@ -2,21 +2,25 @@
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect } from "react";
 import { PencilAltIcon } from "@heroicons/react/outline";
-import { fetchAllCategories } from "../../redux/slices/Category/categorySlice";
+import { fetchAllCategories, deleteCategory } from "../../redux/slices/Category/categorySlice";
 import { Link, useNavigate } from "react-router-dom";
 import DateFormater from "../../utils/DateFormater";
 import LoadingSpinner from '../../components/LoadingSpinner/LoadingSpinner';
+import { RiDeleteBinFill } from 'react-icons/ri'
+
 const CategoryList = () => {
+
   const category = useSelector(state => state?.category);
-  const {userAuth} = useSelector(state => state?.users);
+  const { userAuth } = useSelector(state => state?.users);
   const { categoryList, loading, appErr, serverErr } = category
-const navigate = useNavigate()
+  const navigate = useNavigate()
   const dispatch = useDispatch();
+
   useEffect(() => {
     dispatch(fetchAllCategories());
-    if(!userAuth) navigate('/')
-  }, [dispatch,userAuth])
-  
+   // if (!userAuth.isAdmin) navigate('/home')
+  }, [dispatch])
+
 
   return (
     <>
@@ -27,7 +31,7 @@ const navigate = useNavigate()
           {serverErr} {serverErr}
         </h2>
       ) : categoryList?.length <= 0 ? (
-        <h2 className="text-center text-3xl text-green-800">
+        <h2 className="flex items-center justify-center mt-96 text-3xl text-green-800">
           No category Found
         </h2>
       ) : (
@@ -60,49 +64,52 @@ const navigate = useNavigate()
                         scope="col"
                         className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
                       >
-                        Edit
+                        Actions
                       </th>
                     </tr>
                   </thead>
                   <tbody>
-                    {categoryList?.map((category,index) => {
-                     
-                     return(
-                      <tr className="bg-gray-50" key={index}>
-                       <td className="px-6 py-4 whitespace-nowrap">
-                          <div className="flex items-center">
-                            <div className="flex-shrink-0 h-10 w-10">
-                              <img
-                                className="h-10 w-10 rounded-full"
-                                src={category?.user?.profilePhoto}
-                                alt="category profile"
-                              />
-                            </div>
-                            <div className="ml-4 flex flex-col">
-                              <div className="text-sm font-medium text-gray-900 ">
-                                {category?.user?.fullName} 
+                    {categoryList?.map((category, index) => {
+
+                      return (
+                        <tr className="bg-gray-50" key={index}>
+                          <td className="px-6 py-4 whitespace-nowrap">
+                            <div className="flex items-center">
+                              <div className="flex-shrink-0 h-10 w-10">
+                                <img
+                                  className="h-10 w-10 rounded-full"
+                                  src={category?.user?.profilePhoto}
+                                  alt="category profile"
+                                />
                               </div>
-                              <div className="text-sm text-gray-500">
-                                 {category?.user?.email}
+                              <div className="ml-4 flex flex-col">
+                                <div className="text-sm font-medium text-gray-900 ">
+                                  {category?.user?.fullName}
+                                </div>
+                                <div className="text-sm text-gray-500">
+                                  {category?.user?.email}
+                                </div>
                               </div>
                             </div>
-                          </div>
-                        </td>
-                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                          {category.title}
-                        </td>
-                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                          {< DateFormater date={category?.createdAt} />}
-                        </td>
-                        <Link to="/" >
-                          <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                            <PencilAltIcon className="h-5 text-indigo-500" />
                           </td>
-                          </Link>
-                    </tr>
-                     )
-                     
-})}
+                          <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                            {category.title}
+                          </td>
+                          <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                            {< DateFormater date={category?.createdAt} />}
+                          </td>
+
+                          <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 space-x-2 flex items-center ">
+                            <Link to ={`/update-category/${category?._id}`} >
+                              <PencilAltIcon className="h-9 text-indigo-500" />
+                            </Link>
+                            <RiDeleteBinFill onClick={() => dispatch(deleteCategory(category?._id))} color="red" size={"2rem"}/>
+                          </td>
+
+                        </tr>
+                      )
+
+                    })}
                   </tbody>
                 </table>
               </div>

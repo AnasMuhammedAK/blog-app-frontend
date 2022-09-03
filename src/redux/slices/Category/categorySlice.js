@@ -22,7 +22,7 @@ export const fetchAllCategories = createAsyncThunk("category/fetchall",
         }
     })
 //Fetching single category Action
-export const fetchCategory = createAsyncThunk("category/delete",
+export const fetchCategory = createAsyncThunk("category/fetch",
     async (id, { rejectWithValue, getState, dispatch }) => {
         try {
             return await categoryService.fetchDetails(id)
@@ -33,9 +33,9 @@ export const fetchCategory = createAsyncThunk("category/delete",
     })
 //Update category Action
 export const updateCategory = createAsyncThunk("category/update",
-    async (category, { rejectWithValue, getState, dispatch }) => {
+    async (data, { rejectWithValue, getState, dispatch }) => {
         try {
-            return await categoryService.update(category)
+            return await categoryService.update(data)
         } catch (error) {
             if (!error?.response) throw error
             return rejectWithValue(error?.response?.data)
@@ -51,15 +51,25 @@ export const deleteCategory = createAsyncThunk("category/delete",
             return rejectWithValue(error?.response?.data)
         }
     })
-
+// initial state of categories
 const initialState = {
-
-}
+    // categoryList: [],
+    // category:"",
+    // updatedCategory:"",
+    // appErr: false,
+    // serverErr: false,
+    // isSuccess: false,
+    // loading: false,
+  }
+  
 
 //Slices
 const categorySlices = createSlice({
     name: "category",
     initialState,
+    reducers:{
+        reset:(state) => {}
+    },
     extraReducers: (builder) => {
         builder
             //create a new category
@@ -68,6 +78,7 @@ const categorySlices = createSlice({
             })
             .addCase(createCategory.fulfilled, (state, action) => {
                 state.loading = false
+                state.isSuccess = true
                 state.category = action.payload
                 state.appErr = undefined
                 state.serverErr = undefined
@@ -85,6 +96,7 @@ const categorySlices = createSlice({
             })
             .addCase(fetchAllCategories.fulfilled, (state, action) => {
                 state.loading = false
+                state.isSuccess = true
                 state.categoryList = action.payload
                 state.appErr = undefined
                 state.serverErr = undefined
@@ -101,6 +113,7 @@ const categorySlices = createSlice({
             })
             .addCase(fetchCategory.fulfilled, (state, action) => {
                 state.loading = false
+                state.isSuccess = true
                 state.category = action.payload
                 state.appErr = undefined
                 state.serverErr = undefined
@@ -117,6 +130,7 @@ const categorySlices = createSlice({
             })
             .addCase(updateCategory.fulfilled, (state, action) => {
                 state.loading = false
+                state.isSuccess = true
                 state.updatedCategory = action.payload
                 state.appErr = undefined
                 state.serverErr = undefined
@@ -133,7 +147,10 @@ const categorySlices = createSlice({
             })
             .addCase(deleteCategory.fulfilled, (state, action) => {
                 state.loading = false
-                state.deletedCategory = action.payload
+                state.isSuccess = true
+                state.categoryList = state.categoryList.filter(
+                    (category) => category._id !== action.payload._id
+                  )
                 state.appErr = undefined
                 state.serverErr = undefined
             })
@@ -145,5 +162,5 @@ const categorySlices = createSlice({
             })
     }
 })
-
+export const { reset } = categorySlices.actions
 export default categorySlices.reducer

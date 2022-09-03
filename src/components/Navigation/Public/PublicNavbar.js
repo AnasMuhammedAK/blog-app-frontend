@@ -9,7 +9,7 @@ import { PlusIcon } from "@heroicons/react/solid";
 import Logo from '../../../images/logo-app.png'
 
 const navigation = [
-  { name: "Home", href: "/", current: true },
+  { name: "Home", href: "/home", current: true },
   { name: "Create", href: "/create-post", current: false },
   { name: "Posts", href: "/posts", current: false },
   { name: "Register", href: "/register", current: false },

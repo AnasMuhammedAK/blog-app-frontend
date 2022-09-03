@@ -55,7 +55,7 @@ const Register = () => {
     const userInfo = JSON.parse(localStorage.getItem('userInfo'))
     if(userInfo){
      // toast("successfully registered")
-     navigate('/')
+     navigate('/home')
    }
   }, [])
 

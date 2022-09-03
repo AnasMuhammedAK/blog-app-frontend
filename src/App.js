@@ -10,25 +10,50 @@ import Register from './components/User/Register/Register';
 import { GoogleOAuthProvider } from '@react-oauth/google';
 import AddNewCategory from './components/Categories/AddNewCategory';
 import CategoryList from './components/Categories/CategoryList';
+import UpdateCategory from './components/Categories/UpdateCategory';
+import ProtectRouter from './components/Protect/ProtectRouter';
+import Posts from './components/Posts/Posts';
+import Unauthorized from './components/UnAuth/UnAuthorized';
+
+
+const ROLES = {
+  Admin: "Admin",
+  Blogger: "Blogger",
+  Guest: "Guest",
+}
 
 
 function App() {
   return (
-    <GoogleOAuthProvider clientId ={process.env.REACT_APP_GOOGLE_CLIENT_ID}>
+    <GoogleOAuthProvider clientId={process.env.REACT_APP_GOOGLE_CLIENT_ID}>
       <Router>
-        <ToastContainer />
         <Navbar />
+        <ToastContainer />
         <Routes>
-          <Route path='/' element={<HomePage />} />
+
+           {/* Can Access Admin, Blogger and Guest*/}
+          <Route index path='/home' element={<HomePage />} />
           <Route path='/register' element={<Register />} />
           <Route path='/login' element={<Login />} />
           <Route path='/forgotPassword' element={<ForgotPassword />} />
           <Route path='/resetPassword/:token' element={<ResetPassword />} />
-          <Route path='/add-category' element={<AddNewCategory />} />
-          <Route path='/category-list' element={<CategoryList />} />
+          <Route path='/unauthorized' element={<Unauthorized />} />
+
+          {/* Can Access Admin only */}
+          <Route path="/" element={<ProtectRouter allowedRoles={[ROLES.Admin]} />} >
+            <Route path='add-category' element={<AddNewCategory />} />
+            <Route path='category-list' element={<CategoryList />} />
+            <Route path='update-category/:id' element={<UpdateCategory />} />
+          </Route>
+
+          {/* Can Access Admin and Blogger */}
+          <Route path="/" element={<ProtectRouter allowedRoles={[ROLES.Blogger, ROLES.Admin]} />} >
+            <Route path='posts' element={<Posts />} />
+          </Route>
+
         </Routes>
       </Router>
-    </GoogleOAuthProvider>
+    </GoogleOAuthProvider >
   );
 }
 

@@ -1,6 +1,6 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
+import { toast } from 'react-toastify'
 import usersServiece from './usersService'
-
 //---------------------------------------------------
 //register action
 //---------------------------------------------------
@@ -31,6 +31,7 @@ async(user, { rejectWithValue, getState, dispatch }) => {
 export const logoutUserAction = createAsyncThunk('users/logout',
 async(payload, { rejectWithValue, getState, dispatch }) => {
 try {
+    
     const { refreshToken } = JSON.parse(localStorage.getItem('tokens'))
   return await usersServiece.logout(refreshToken)
 } catch (error) {

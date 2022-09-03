@@ -4,7 +4,7 @@ import * as Yup from "yup";
 import jwtDecode from 'jwt-decode'
 import { useSelector, useDispatch } from "react-redux";
 import { loginUserAction } from "../../../redux/slices/users/usersSlice";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { GoogleLogin } from '@react-oauth/google';
 
 //Form schema
@@ -17,7 +17,9 @@ const formSchema = Yup.object({
 const Login = () => {
   const dispatch = useDispatch()
   const navigate = useNavigate()
-  const [googleAuth, setGoogleAuth] = useState('')
+  const location = useLocation()
+  const from = location.state?.from?.pathname || "/home"
+ console.log(from)
   //formik
   const formik = useFormik({
     initialValues: {
@@ -40,7 +42,7 @@ const Login = () => {
 
    //redired when registered
    if(userAuth){
-    navigate('/')
+    navigate(from)
   }
  }, [userAuth])
 

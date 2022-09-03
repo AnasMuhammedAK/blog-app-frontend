@@ -46,7 +46,7 @@ const OtpForm = ({ open, setOpen }) => {
 
         //redired when registered
         if (status) {
-            navigate('/')
+            navigate('/home')
         }
     }, [status])
     return (

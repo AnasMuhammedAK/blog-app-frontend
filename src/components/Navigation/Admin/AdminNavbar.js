@@ -14,7 +14,7 @@ import { useDispatch,useSelector } from "react-redux";
 import { logoutUserAction } from "../../../redux/slices/users/usersSlice";
 
 const navigation = [
-  { name: "Home", href: "/", current: true },
+  { name: "Home", href: "/home", current: true },
   { name: "Create", href: "/create-post", current: false },
   { name: "Posts", href: "/posts", current: false },
   { name: "Authors", href: "/users", current: false },
