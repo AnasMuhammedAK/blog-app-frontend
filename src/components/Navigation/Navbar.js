@@ -1,6 +1,5 @@
 import React from "react";
 import { useSelector } from "react-redux";
-import UserLoggedInOutlet from "../outlets/userLoggedInOutlet";
 import AdminNavbar from "./Admin/AdminNavbar";
 import PrivateNavbar from "./Private/PrivateNavbar";
 import PublicNavbar from "./Public/PublicNavbar";
@@ -8,8 +7,7 @@ import PublicNavbar from "./Public/PublicNavbar";
 const Navbar = () => {
 
   //get user from store
-  const userFromStore = useSelector (state => state.users)
-  const { userAuth } = userFromStore
+  const { userAuth } = useSelector (state => state.users)
   const isAdmin = userAuth?.isAdmin
   return (
     <>

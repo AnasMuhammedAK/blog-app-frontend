@@ -14,6 +14,9 @@ import UpdateCategory from './components/Categories/UpdateCategory';
 import ProtectRouter from './components/Protect/ProtectRouter';
 import Posts from './components/Posts/Posts';
 import Unauthorized from './components/UnAuth/UnAuthorized';
+import CreatePost from './components/Posts/CreatePost';
+import PostDetails from './components/Posts/PostDetails';
+
 
 
 const ROLES = {
@@ -30,14 +33,15 @@ function App() {
         <Navbar />
         <ToastContainer />
         <Routes>
-
-           {/* Can Access Admin, Blogger and Guest*/}
+          {/* Can Access Admin, Blogger and Guest*/}
           <Route index path='/home' element={<HomePage />} />
           <Route path='/register' element={<Register />} />
           <Route path='/login' element={<Login />} />
           <Route path='/forgotPassword' element={<ForgotPassword />} />
           <Route path='/resetPassword/:token' element={<ResetPassword />} />
           <Route path='/unauthorized' element={<Unauthorized />} />
+          <Route path='posts' element={<Posts />} />
+          <Route path='posts/:id' element={<PostDetails />} />
 
           {/* Can Access Admin only */}
           <Route path="/" element={<ProtectRouter allowedRoles={[ROLES.Admin]} />} >
@@ -48,7 +52,7 @@ function App() {
 
           {/* Can Access Admin and Blogger */}
           <Route path="/" element={<ProtectRouter allowedRoles={[ROLES.Blogger, ROLES.Admin]} />} >
-            <Route path='posts' element={<Posts />} />
+            <Route path='create-post' element={<CreatePost />} />
           </Route>
 
         </Routes>

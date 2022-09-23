@@ -16,7 +16,6 @@ const generateRefreshToken = async () => {
         console.log(err);
     }
 };
-
 axiosInstance.interceptors.request.use(
     async (config) => {
         const { accessToken } = JSON.parse(localStorage.getItem('tokens'))
@@ -26,13 +25,12 @@ axiosInstance.interceptors.request.use(
             console.log('Expired access token..')
             const data = await generateRefreshToken();
             config.headers["Authorization"] = "Bearer " + data.accessToken;
-            return config;
+            return config
         } else {
             console.log('With old access token token..')
-            config.headers["Authorization"] = "Bearer " + accessToken;
-            return config;
+            config.headers["Authorization"] = "Bearer " + accessToken
+            return config
         }
-        
     },
     (error) => {
         return Promise.reject(error);

@@ -32,12 +32,6 @@ const login = async (userData) => {
 //LOGOUT USER
 //-------------------------------------------------------------
 const logout = async (refreshToken) => {
-    // const config = {
-    //     headers: {
-    //         Authorization: `Bearer ${accessToken}`, 
-    //     },
-    // }
- 
    const { data } =  await privateAxios.post(`/api/users/logout`, { refreshToken })
    if(data.status) {
     localStorage.removeItem('userInfo')

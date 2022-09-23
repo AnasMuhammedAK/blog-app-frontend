@@ -46,9 +46,9 @@ const CategoryList = () => {
                         scope="col"
                         className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
                       >
-                        AuthoruserAuth
+                        Authors
                       </th>
-                      <th
+                      <th 
                         scope="col"
                         className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
                       >
@@ -103,7 +103,7 @@ const CategoryList = () => {
                             <Link to ={`/update-category/${category?._id}`} >
                               <PencilAltIcon className="h-9 text-indigo-500" />
                             </Link>
-                            <RiDeleteBinFill onClick={() => dispatch(deleteCategory(category?._id))} color="red" size={"2rem"}/>
+                            <RiDeleteBinFill className="cursor-pointer" onClick={() => dispatch(deleteCategory(category?._id))} color="red" size={"2rem"}/>
                           </td>
 
                         </tr>

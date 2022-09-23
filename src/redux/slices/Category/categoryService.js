@@ -1,6 +1,6 @@
 import { toast } from 'react-toastify'
 import privateAxios from '../../../utils/privateAxios'
-
+import publicAxios from '../../../utils/publicAxios'
 //CREATE CATEGORY
 const create = async (category) => {
     const { data } = await privateAxios.post('/api/category/create',category)
@@ -8,14 +8,13 @@ const create = async (category) => {
     return data
 }
 //FETCH ALL CATEGORY
-const fetchAll = async () => {
-    const { data } = await privateAxios.get('/api/category/all')
-    console.log(data)
+const fetchAll = async (category) => {
+    const { data } = await publicAxios.get(`/api/category/all`)
     return data
 }
 //FETCH CATEGORY
 const fetchDetails = async (id) => {
-      const { data } = await privateAxios.get(`/api/category/${id}`)
+      const { data } = await publicAxios.get(`/api/category/${id}`)
       return data
   }
 //UPDATE CATEGORY
