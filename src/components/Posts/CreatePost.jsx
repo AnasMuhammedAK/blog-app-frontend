@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useRef } from 'react'
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import { useSelector, useDispatch } from "react-redux";
@@ -6,9 +6,9 @@ import { createpostAction } from '../../redux/slices/posts/postSlice';
 import Dropzone from 'react-dropzone'
 import CategoryDropDown from '../Categories/CategoryDropdown';
 import styled from "styled-components";
-import {useNavigate} from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 import LoadingSpinner from '../LoadingSpinner/LoadingSpinner';
-
+import JoditEditor from "jodit-react";
 //css for dropzone
 const Container = styled.div`
   flex: 1;
@@ -33,8 +33,10 @@ const formSchema = Yup.object({
     image: Yup.string().required('Image is required'),
 });
 function CreatePost() {
+    const editor = useRef(null);
     const dispatch = useDispatch()
     const navigate = useNavigate()
+   
     //formik
     //select store data
     const post = useSelector(state => state?.posts);
@@ -56,7 +58,7 @@ function CreatePost() {
                 image: values?.image
             }
             dispatch(createpostAction(data))
-            
+
         },
         validationSchema: formSchema,
     });
@@ -122,7 +124,17 @@ function CreatePost() {
                                     Description
                                 </label>
                                 {/* Description */}
-                                <textarea
+                                <JoditEditor
+                                    ref={editor}
+                                    value={formik.values.description}
+                                    onChange={formik.handleChange("description")}
+                                    onBlur={formik.handleBlur("description")}
+                                    rows="10"
+                                    cols="15"
+                                    className="rounded-lg appearance-none block w-full py-3 px-3 text-base text-center leading-tight text-gray-600 bg-transparent focus:bg-transparent  border border-gray-200 focus:border-gray-500  focus:outline-none"
+                                    type="text"
+                                />
+                                {/* <textarea
                                     value={formik.values.description}
                                     onChange={formik.handleChange("description")}
                                     onBlur={formik.handleBlur("description")}
@@ -130,7 +142,7 @@ function CreatePost() {
                                     cols="10"
                                     className="rounded-lg appearance-none block w-full py-3 px-3 text-base text-center leading-tight text-gray-600 bg-transparent focus:bg-transparent  border border-gray-200 focus:border-gray-500  focus:outline-none"
                                     type="text"
-                                ></textarea>
+                                ></textarea> */}
                                 {/* Err msg */}
                                 <div className="text-red-500">
                                     {formik.touched.description && formik.errors.description}
