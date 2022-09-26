@@ -79,8 +79,8 @@ export default function Posts() {
                   <h1>No Post Found</h1>
                 ) : (
                   postLists?.map((post, index) => (
-                    <div key={index} class="flex flex-wrap bg-[#F1F5F9]  lg:mb-6 border border-gray-400 rounded-xl mr-10 p-10">
-                      <div class="mb-10  w-full lg:w-1/4 px-3">
+                    <div  class="flex flex-wrap bg-[#F1F5F9]  lg:mb-6 border border-gray-400 rounded-xl mr-10 p-10">
+                      <div class="mb-10  w-full lg:w-1/4">
                         <Link to={`/posts/${post?._id}`}>
                           {/* Post image */}
                           <img
@@ -130,8 +130,10 @@ export default function Posts() {
                             {post?.title}
                           </h3>
                         </Link>
-                        <div className="">
+                        {/* <div className="">
                           <p class="text-black break-words ">{post?.description}</p>
+                        </div> */}
+                        <div style={{overflow: "hidden", textOverflow: "ellipsis",height:'150px' }} class="text-black" dangerouslySetInnerHTML={{ __html: post?.description }}>
                         </div>
                         {/* Read more */}
                         <Link to={`/posts/${post?._id}`} className="text-indigo-500 hover:underline">

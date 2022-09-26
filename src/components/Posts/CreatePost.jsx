@@ -36,7 +36,7 @@ function CreatePost() {
     const editor = useRef(null);
     const dispatch = useDispatch()
     const navigate = useNavigate()
-   
+
     //formik
     //select store data
     const post = useSelector(state => state?.posts);
@@ -62,10 +62,42 @@ function CreatePost() {
         },
         validationSchema: formSchema,
     });
+    const config = {
+        zIndex: 0,
+        readonly: false,
+        activeButtonsInReadOnly: ['source', 'fullsize', 'print', 'about'],
+        toolbarButtonSize: 'middle',
+        theme: 'default',
+        enableDragAndDropFileToEditor: true,
+        saveModeInCookie: false,
+        spellcheck: true,
+        editorCssClass: false,
+        triggerChangeEvent: true,
+        height: 300,
+        direction: 'ltr',
+        language: 'en',
+        debugLanguage: false,
+        i18n: 'en',
+        tabIndex: -1,
+        toolbar: true,
+        enter: 'P',
+        useSplitMode: false,
+        colorPickerDefaultTab: 'background',
+        imageDefaultWidth: 300,
+       // removeButtons: ['source', 'fullsize', 'about', 'outdent', 'indent', 'video', 'print', 'table', 'fontsize', 'superscript', 'subscript', 'file', 'cut', 'selectall'],
+       // disablePlugins: ['paste', 'stat'],
+        events: {},
+        textIcons: false,
+        uploader: {
+            insertImageAsBase64URI: true
+        },
+        placeholder: 'Start typing',
+        showXPathInStatusbar: false
+    }
     return (
         <>
             <div className="min-h-screen bg-[#F1F5F9] flex flex-col justify-center py-12 px-4 sm:px-6 lg:px-8 " >
-                <div className="sm:mx-auto sm:w-full sm:max-w-md  ">
+                <div className="mt-20 sm:mx-auto sm:w-full sm:max-w-md  ">
                     <h2 className="mt-6 text-center text-3xl font-extrabold text-black">
                         Create Post
                     </h2>
@@ -81,7 +113,7 @@ function CreatePost() {
                         </p>
                     ) : null}
                 </div>
-                <div className="mt-8 sm:mx-auto sm:w-full sm:max-w-lg border-none rounded-xl">
+                <div className="mt-8 sm:mx-auto sm:w-full  lg:w-3/4 border-none rounded-xl">
                     <div className="bg-white py-8 px-4 shadow sm:rounded-lg sm:px-10">
                         <form className="space-y-6" onSubmit={formik.handleSubmit}>
                             <div>
@@ -94,9 +126,9 @@ function CreatePost() {
                                 <div className="mt-1">
                                     {/* Title */}
                                     <input
-                                        value={formik.values.title}
-                                        onChange={formik.handleChange("title")}
-                                        onBlur={formik.handleBlur("title")}
+                                        value={formik?.values?.title}
+                                        onChange={formik?.handleChange("title")}
+                                        onBlur={formik?.handleBlur("title")}
                                         id="title"
                                         name="title"
                                         type="title"
@@ -125,12 +157,13 @@ function CreatePost() {
                                 </label>
                                 {/* Description */}
                                 <JoditEditor
+                                    
                                     ref={editor}
-                                    value={formik.values.description}
-                                    onChange={formik.handleChange("description")}
-                                    onBlur={formik.handleBlur("description")}
-                                    rows="10"
-                                    cols="15"
+                                    value={formik?.values?.description}
+                                    onChange={formik?.handleChange("description")}
+                                    onBlur={formik?.handleBlur("description")}
+                                    config={config}
+                                    
                                     className="rounded-lg appearance-none block w-full py-3 px-3 text-base text-center leading-tight text-gray-600 bg-transparent focus:bg-transparent  border border-gray-200 focus:border-gray-500  focus:outline-none"
                                     type="text"
                                 />

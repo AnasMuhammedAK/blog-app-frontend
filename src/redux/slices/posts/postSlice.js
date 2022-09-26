@@ -4,6 +4,8 @@ import publicAxios from '../../../utils/publicAxios'
 
 //action to redirect
 const resetPost = createAction("category/reset");
+const resetPostEdit = createAction("post/reset")
+const deletePostReset = createAction("post/delete")
 //Create Post action
 export const createpostAction = createAsyncThunk("post/created",
   async (post, { rejectWithValue, getState, dispatch }) => {
@@ -25,6 +27,20 @@ export const createpostAction = createAsyncThunk("post/created",
     }
   }
 );
+// Update Post
+export const updatePostAction = createAsyncThunk('post/updated', 
+async (post, { rejectWithValue, getState, dispatch }) => {
+  try {
+    const { data } = await privateAxios.put(`/api/posts/${post.id}`, post)
+   
+    return data;
+  } catch (error) {
+    if (!error?.response) throw error;
+    let message = (error?.response?.data?.message) ? (error?.response?.data?.message) : (error?.response?.data)
+    return rejectWithValue(message)
+  }
+})
+
 //fetch all posts
 export const fetchPostsAction = createAsyncThunk(
   "post/list",
@@ -80,12 +96,31 @@ export const toggleAddDisLikesToPost = createAsyncThunk('post/dislike',
       return rejectWithValue(message)
     }
   })
-
+  export const deletePostAction = createAsyncThunk(
+    "post/delete",
+    async (postId, { rejectWithValue, getState, dispatch }) => {
+      try {
+        const { data } = await privateAxios.delete( `/api/posts/${postId}`);
+        dispatch(deletePostReset())
+        return data;
+      } catch (error) {
+        if (!error?.response) throw error
+        let message = (error?.response?.data?.message) ? (error?.response?.data?.message) : (error?.response?.data)
+        return rejectWithValue(message)
+      }
+    }
+  );
 
 //slice
 const postSlice = createSlice({
   name: "post",
   initialState: {},
+  reducers: {
+    reset: (state) => {
+      state.isCreated=false;
+      state.isUpdated=false
+    },
+  },
   extraReducers: builder => {
     builder.addCase(createpostAction.pending, (state, action) => {
       state.loading = true;
@@ -106,6 +141,22 @@ const postSlice = createSlice({
       state.appErr = action?.payload
       state.serverErr = action?.error?.message;
     });
+    // Update post
+		builder.addCase(updatePostAction.pending, (state, action) => {
+			state.loading = true;
+		})
+		builder.addCase(updatePostAction.fulfilled, (state, action) => {
+			state.postUpdated = action?.payload;
+      state.isUpdated = true
+			state.loading = false
+			state.appErr = undefined
+			state.serverErr = undefined
+		})
+		builder.addCase(updatePostAction.rejected, (state, action) => {
+			state.loading = false;
+			state.appErr = action?.payload
+			state.serverErr = action?.error?.message;
+		})
     //fetch posts
     builder.addCase(fetchPostsAction.pending, (state, action) => {
       state.loading = true;
@@ -166,7 +217,26 @@ const postSlice = createSlice({
       state.appErr = action?.payload
       state.serverErr = action?.error?.message
     })
+    //delete
+    builder.addCase(deletePostAction.pending, (state, action) => {
+      state.loading = true;
+    });
+    builder.addCase(deletePostReset, (state, action) => {
+      state.isDeleted = true;
+    });
+    builder.addCase(deletePostAction.fulfilled, (state, action) => {
+      state.loading = false;
+      state.postDeleted = action?.payload;
+      state.isDeleted = false;
+      state.appErr = undefined;
+      state.serverErr = undefined;
+    });
+    builder.addCase(deletePostAction.rejected, (state, action) => {
+      state.loading = false;
+      state.appErr = action?.payload
+      state.serverErr = action?.error?.message;
+    });
   },
 });
-
+export const { reset } = postSlice.actions
 export default postSlice.reducer;

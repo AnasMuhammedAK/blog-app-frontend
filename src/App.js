@@ -16,6 +16,7 @@ import Posts from './components/Posts/Posts';
 import Unauthorized from './components/UnAuth/UnAuthorized';
 import CreatePost from './components/Posts/CreatePost';
 import PostDetails from './components/Posts/PostDetails';
+import UpdatePost from './components/Posts/UpdatePost';
 
 
 
@@ -53,6 +54,7 @@ function App() {
           {/* Can Access Admin and Blogger */}
           <Route path="/" element={<ProtectRouter allowedRoles={[ROLES.Blogger, ROLES.Admin]} />} >
             <Route path='create-post' element={<CreatePost />} />
+            <Route path='update-post/:id' element={<UpdatePost />} />
           </Route>
 
         </Routes>
