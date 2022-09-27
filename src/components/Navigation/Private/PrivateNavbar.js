@@ -24,12 +24,13 @@ function classNames(...classes) {
 }
 
 const PrivateNavbar = ({ isLogin }) => {
-  const userNavigation = [
-    { name: "Your Profile", href: `/profile` },
-    { name: "Change your password", href: "/update-password" },
-  ]
   const dispatch = useDispatch()
   const { userAuth } = useSelector(state => state?.users)
+  const userNavigation = [
+    { name: "Your Profile", href: `/profile/${userAuth?._id}` },
+    { name: "Change your password", href: "/update-password" },
+  ]
+ 
   return (
     <Disclosure as="nav" className="fixed top-0 right-0 left-0 z-10 bg-black py-3">
       {({ open }) => (

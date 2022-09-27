@@ -17,7 +17,9 @@ import Unauthorized from './components/UnAuth/UnAuthorized';
 import CreatePost from './components/Posts/CreatePost';
 import PostDetails from './components/Posts/PostDetails';
 import UpdatePost from './components/Posts/UpdatePost';
-
+import Profile from './components/User/profile/Profile';
+import UploadProfilePhoto from './components/User/profile/AddImage';
+UploadProfilePhoto
 
 
 const ROLES = {
@@ -55,6 +57,8 @@ function App() {
           <Route path="/" element={<ProtectRouter allowedRoles={[ROLES.Blogger, ROLES.Admin]} />} >
             <Route path='create-post' element={<CreatePost />} />
             <Route path='update-post/:id' element={<UpdatePost />} />
+            <Route path='profile/:id' element={<Profile />} />
+            <Route path='upload-profile-photo' element={<UploadProfilePhoto />} />
           </Route>
 
         </Routes>

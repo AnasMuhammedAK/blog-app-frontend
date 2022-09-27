@@ -142,19 +142,19 @@ export default function Posts() {
                         {/* User Avatar */}
                         <div className="mt-6 flex items-center">
                           <div className="flex-shrink-0">
-                            {/* <Link> */}
+                            <Link to={`/profile/${post?.user?._id}`}>
                             <img
                               className="h-10 w-10 rounded-full"
                               src={post?.user?.profilePhoto}
                               alt=""
                             />
-                            {/* </Link> */}
+                            </Link>
                           </div>
                           <div className="ml-3">
                             <p className="text-sm font-medium text-gray-900">
-                              {/* <Link className="text-yellow-400 hover:underline "> */}
+                              <Link to={`/profile/${post?.user?._id}`} className="text-black hover:underline ">
                               {post?.user?.fullName}
-                              {/* </Link> */}
+                              </Link>
                             </p>
                             <div className="flex space-x-1 text-sm text-green-500">
                               <time>

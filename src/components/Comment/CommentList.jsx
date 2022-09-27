@@ -6,13 +6,13 @@ import { useDispatch, useSelector } from "react-redux";
 import AddComment from "./AddComment";
 import { render } from "react-dom";
 
-export default function CommentsList({ comments,editCallback }) {
+export default function CommentsList({ comments, editCallback }) {
   const user = useSelector(state => state?.users);
   const { userAuth } = user;
   const isLoginuser = userAuth?._id;
   //dispatch
   const dispatch = useDispatch();
- 
+
   return (
     <div>
       <ul className="divide-y bg-gray-700 w-96 lg:w-[700px] divide-gray-200 p-3 mt-5">
@@ -25,16 +25,20 @@ export default function CommentsList({ comments,editCallback }) {
               <>
                 <li key={comment?._id} className="py-4  w-full">
                   <div className="flex space-x-3">
-                    <img
-                      className="h-6 w-6 rounded-full"
-                      src={comment?.user?.profilePhoto}
-                      alt=""
-                    />
+                    <Link to={`/profile/${comment?.user?._id}`}>
+                      <img
+                        className="h-6 w-6 rounded-full"
+                        src={comment?.user?.profilePhoto}
+                        alt=""
+                      />
+                    </Link>
                     <div className="flex-1 space-y-1">
                       <div className="flex items-center justify-between">
-                        <h3 className="text-sm font-medium text-green-400">
-                          {comment?.user?.fullName}  
-                        </h3>
+                        <Link to={`/profile/${comment?.user?._id}`}>
+                          <h3 className="text-sm font-medium text-green-400 hover:underline">
+                            {comment?.user?.fullName}
+                          </h3>
+                        </Link>
                         <p className="text-bold text-yellow-500 text-base ml-5">
                           {/* <Moment fromNow ago>
                       {comment?.createdAt}
@@ -56,7 +60,7 @@ export default function CommentsList({ comments,editCallback }) {
                             to={`/update-comment/${comment?._id}`}
                             class="p-3"
                           > */}
-                            <PencilAltIcon onClick={() => editCallback(comment?._id,comment?.description)} class="h-5 mt-3 text-yellow-300" />
+                          <PencilAltIcon onClick={() => editCallback(comment?._id, comment?.description)} class="h-5 mt-3 text-yellow-300" />
                           {/* </Link> */}
                           <button
                             onClick={() =>

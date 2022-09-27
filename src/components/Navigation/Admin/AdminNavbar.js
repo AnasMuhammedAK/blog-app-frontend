@@ -27,13 +27,13 @@ function classNames(...classes) {
 }
 
 const AdminNavbar = () => {
-  //Navigation
-  const userNavigation = [
-    { name: "Your Profile", href: `/profile` },
-    { name: "Change your password", href: "/update-password" },
-  ];
   const dispatch = useDispatch()
 const { userAuth } = useSelector(state => state?.users)
+  //Navigation
+  const userNavigation = [
+    { name: "Your Profile", href: `/profile/${userAuth?._id}` },
+    { name: "Change your password", href: "/update-password" },
+  ];
   return ( 
     <Disclosure as="nav" className="fixed top-0 right-0 left-0 z-10 bg-gray-800 py-3">
       {({ open }) => (
