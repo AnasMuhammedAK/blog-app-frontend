@@ -1,6 +1,12 @@
-import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
+import { createAsyncThunk, createSlice, createAction } from '@reduxjs/toolkit'
 import privateAxios from '../../../utils/privateAxios'
 import usersServiece from './usersService'
+
+// Redirect action
+const resetUserAction = createAction("user/profile/reset");
+// Redirect action
+const resetPasswordAction = createAction("user/password/reset");
+
 //---------------------------------------------------
 //register action
 //---------------------------------------------------
@@ -43,7 +49,6 @@ export const userProfileAction = createAsyncThunk(
 //---------------------------------------------------
 // Upload Profile photo
 //---------------------------------------------------
-
 export const uploadProfilePhotoAction = createAsyncThunk(
     "user/profile-photo",
     async (userImage, { rejectWithValue, getState, dispatch }) => {
@@ -58,7 +63,68 @@ export const uploadProfilePhotoAction = createAsyncThunk(
         }
     }
 );
+//---------------------------------------------------
+// update user profile
+//---------------------------------------------------
+export const updateUserAction = createAsyncThunk(
+    "users/update",
+    async (userData, { rejectWithValue, getState, dispatch }) => {
+        try {
+            const { data } = await privateAxios.put(`/api/users/profile`,
+                {
+                    firstName: userData?.firstName,
+                    lastName: userData?.lastName,
+                    email: userData?.email,
+                    bio: userData?.bio,
+                });
+            // dispatch
+            dispatch(resetUserAction());
+            return data;
+        } catch (error) {
+            if (!error?.response) throw error;
+            return rejectWithValue(error?.response?.data);
+        }
+    }
+);
+// Fetch user Details
+export const fetchUserDetailsAction = createAsyncThunk(
+    "users/detail",
+    async (id, { rejectWithValue, getState, dispatch }) => {
+        try {
+            const { data } = await privateAxios.get(`/api/users/${id}`);
+            return data;
+        } catch (error) {
+            if (!error?.response) throw error;
+            return rejectWithValue(error?.response?.data);
+        }
+    }
+);
+// Follow
+export const followUserAction = createAsyncThunk("user/follow",
+    async (userToFollowId, { rejectWithValue, getState, dispatch }) => {
+        try {
+            const { data } = await privateAxios.put(`/api/users/follow`, { followId: userToFollowId });
+            return data;
+        } catch (error) {
+            if (!error?.response) throw error;
+            return rejectWithValue(error?.response?.data);
+        }
+    }
+);
 
+// unFollow
+export const unFollowUserAction = createAsyncThunk(
+    "user/un-follow",
+    async (unFollowId, { rejectWithValue, getState, dispatch }) => {
+        try {
+            const { data } = await privateAxios.put(`/api/users/un-follow`, { unFollowId });
+            return data;
+        } catch (error) {
+            if (!error?.response) throw error;
+            return rejectWithValue(error?.response?.data);
+        }
+    }
+);
 //---------------------------------------------------
 //Logout Action
 //---------------------------------------------------
@@ -168,6 +234,83 @@ const usersSlice = createSlice({
                 state.loading = false;
                 state.appErr = action?.payload?.message;
                 state.serverErr = action?.error?.message;
+            })
+            // update profile
+            .addCase(updateUserAction.pending, (state, action) => {
+                state.loading = true;
+                state.appErr = undefined;
+                state.serverErr = undefined;
+            })
+            .addCase(resetUserAction, (state, action) => {
+                state.isUpdated = true;
+            })
+            .addCase(updateUserAction.fulfilled, (state, action) => {
+                state.loading = false;
+                state.userUpdated = action?.payload;
+                state.isUpdated = false;
+                state.appErr = undefined;
+                state.serverErr = undefined;
+            })
+            .addCase(updateUserAction.rejected, (state, action) => {
+                state.loading = false;
+                state.appErr = action?.payload?.message;
+                state.serverErr = action?.error?.message;
+            })
+            // fetch user Details
+            .addCase(fetchUserDetailsAction.pending, (state, action) => {
+                state.loading = true;
+                state.appErr = undefined;
+                state.serverErr = undefined;
+            })
+            .addCase(fetchUserDetailsAction.fulfilled, (state, action) => {
+                state.loading = false;
+                state.userDetails = action?.payload;
+                state.appErr = undefined;
+                state.serverErr = undefined;
+            })
+            .addCase(fetchUserDetailsAction.rejected, (state, action) => {
+                state.loading = false;
+                state.appErr = action?.payload?.message;
+                state.serverErr = action?.error?.message;
+            })
+
+            //ser Follow
+            .addCase(followUserAction.pending, (state, action) => {
+                state.loading = true;
+                state.appErr = undefined;
+                state.serverErr = undefined;
+            })
+            .addCase(followUserAction.fulfilled, (state, action) => {
+                state.loading = false;
+                state.followed = action?.payload;
+                state.unFollowed = undefined;
+                state.appErr = undefined;
+                state.serverErr = undefined;
+            })
+            .addCase(followUserAction.rejected, (state, action) => {
+                state.loading = false;
+                state.appErr = action?.payload?.message;
+                state.unFollowed = undefined;
+                state.serverErr = action?.error?.message;
+            })
+
+            //user unFollow
+            .addCase(unFollowUserAction.pending, (state, action) => {
+                state.unfollowLoading = true;
+                state.unFollowedAppErr = undefined;
+                state.unfollowServerErr = undefined;
+            })
+            .addCase(unFollowUserAction.fulfilled, (state, action) => {
+                state.unfollowLoading = false;
+                state.unFollowed = action?.payload;
+                state.followed = undefined;
+                state.unFollowedAppErr = undefined;
+                state.unfollowServerErr = undefined;
+            })
+            .addCase(unFollowUserAction.rejected, (state, action) => {
+                state.unfollowLoading = false;
+                state.unFollowedAppErr = action?.payload?.message;
+                state.unfollowServerErr = action?.error?.message;
             })
 
     },

@@ -92,7 +92,7 @@ export default function UploadProfilePhoto() {
                             {formik.touched.image && formik.errors.image}
                         </div>
                         <p className="text-sm text-gray-500">
-                            PNG, JPG, GIF minimum size 400kb uploaded only 1 image
+                            PNG, JPG, GIF minimum size 1MB uploaded only 1 image
                         </p>
 
                         <div>

@@ -104,8 +104,8 @@ const categorySlices = createSlice({
             .addCase(fetchAllCategories.rejected, (state, action) => {
                 state.loading = false
                 state.categoryList = undefined
-                state.appErr = action.payload.message
-                state.serverErr = action.error.message
+                state.appErr = action?.payload?.message
+                state.serverErr = action?.error?.message
             })
             //fetch single Category
             .addCase(fetchCategory.pending, (state, action) => {

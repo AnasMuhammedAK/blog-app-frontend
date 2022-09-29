@@ -91,7 +91,6 @@ const createOrGetUser = async(response) => {
                 <form onSubmit={formik.handleSubmit}>
                   <h3 className="mb-5 text-2xl text-center text-black font-bold font-heading">
                     Register Account
-                    
                   </h3>
                   <h1 className="mb-5 text-center">
                     {/* display error message */}

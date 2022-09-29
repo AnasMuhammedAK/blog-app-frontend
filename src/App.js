@@ -19,7 +19,8 @@ import PostDetails from './components/Posts/PostDetails';
 import UpdatePost from './components/Posts/UpdatePost';
 import Profile from './components/User/profile/Profile';
 import UploadProfilePhoto from './components/User/profile/AddImage';
-UploadProfilePhoto
+import UpdateProfileForm from './components/User/profile/UpdateProfile';
+import SendEmail from './components/sendMail/SendMail';
 
 
 const ROLES = {
@@ -59,6 +60,8 @@ function App() {
             <Route path='update-post/:id' element={<UpdatePost />} />
             <Route path='profile/:id' element={<Profile />} />
             <Route path='upload-profile-photo' element={<UploadProfilePhoto />} />
+            <Route path='update-profile/:id' element={<UpdateProfileForm />} />
+            <Route path='send-mail' element={<SendEmail />} />
           </Route>
 
         </Routes>
