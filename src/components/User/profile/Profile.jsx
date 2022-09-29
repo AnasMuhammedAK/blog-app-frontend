@@ -183,7 +183,7 @@ export default function Profile() {
                                                                 aria-hidden="true"
                                                             />
                                                             <span className="text-base mr-2  text-bold text-yellow-500">
-                                                                Send Message
+                                                                Send Mail
                                                             </span>
                                                         </Link> : null}
                                                     </div>

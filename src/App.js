@@ -21,6 +21,7 @@ import Profile from './components/User/profile/Profile';
 import UploadProfilePhoto from './components/User/profile/AddImage';
 import UpdateProfileForm from './components/User/profile/UpdateProfile';
 import SendEmail from './components/sendMail/SendMail';
+import AccountVerified from './components/Alerts/AccountVerified';
 
 
 const ROLES = {
@@ -62,6 +63,7 @@ function App() {
             <Route path='upload-profile-photo' element={<UploadProfilePhoto />} />
             <Route path='update-profile/:id' element={<UpdateProfileForm />} />
             <Route path='send-mail' element={<SendEmail />} />
+            <Route path='verify-account/:token' element={<AccountVerified />}/>
           </Route>
 
         </Routes>

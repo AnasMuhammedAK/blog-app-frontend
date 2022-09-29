@@ -20,9 +20,9 @@ const HomePage = () => {
              <div className="flex justify-center lg:justify-start">
              <a
                 className=" inline-block  px-12 py-4 text-lg text-white font-bold bg-blue-500 hover:bg-blue-600 rounded-full transition duration-200"
-                href="/"
+                href="/posts"
               >
-                Read More
+                Read Posts
               </a>
              </div>
             </div>
