@@ -39,6 +39,7 @@ export const userProfileAction = createAsyncThunk(
     async (id, { rejectWithValue, getState, dispatch }) => {
         try {
             const { data } = await privateAxios.get(`/api/users/profile/${id}`);
+            console.log(data)
             return data;
         } catch (error) {
             if (!error?.response) throw error
@@ -54,9 +55,16 @@ export const uploadProfilePhotoAction = createAsyncThunk(
     async (userImage, { rejectWithValue, getState, dispatch }) => {
         try {
             const formData = new FormData();
-            formData.append("image", userImage?.image);
-            const { data } = await privateAxios.put(`/api/users/profile-photo-upload`, formData);
-            return data;
+            formData.append("image",userImage?.image);
+            if(userImage?.banner){
+                const { data } = await privateAxios.put(`/api/users/banner-photo-upload`, formData);
+               if(data.isSuccess) localStorage.setItem('userInfo', JSON.stringify(data))
+                return data;
+            }else{
+                const { data } = await privateAxios.put(`/api/users/profile-photo-upload`, formData);
+                if(data.isSuccess) localStorage.setItem('userInfo', JSON.stringify(data))
+                return data;
+            }
         } catch (error) {
             if (!error?.response) throw error;
             return rejectWithValue(error?.response?.data);

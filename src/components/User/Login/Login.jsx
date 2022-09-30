@@ -153,12 +153,21 @@ const Login = () => {
                         <span onClick={()=> navigate('/forgotPassword')} className=" text-blue-400 hover:text-blue-600 cursor-pointer">Forgot password?</span>
                       </div>
                     {/* Login btn */}
-                    <button
-                      type="submit"
-                      className="py-4 w-full bg-blue-500 hover:bg-blue-600 text-white font-bold rounded-full transition duration-200"
-                    >
-                      Login
-                    </button>
+                    {loading ? (
+                      <button
+                        disabled
+                        className="py-4 w-full bg-gray-500 text-white font-bold rounded-full transition duration-200"
+                      >
+                        Loading...
+                      </button>
+                    ) : (
+                      <button
+                        type="submit"
+                        className="py-4 w-full bg-blue-500 hover:bg-blue-600 text-white font-bold rounded-full transition duration-200"
+                      >
+                        Login
+                      </button>
+                    )}
                   </form>
                   {/* login with google */}
                   <h1 className="text-center mt-3"> OR </h1>

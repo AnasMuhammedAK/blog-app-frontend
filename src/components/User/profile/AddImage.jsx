@@ -1,6 +1,6 @@
 import { UploadIcon } from "@heroicons/react/outline";
 import Dropzone from "react-dropzone";
-import { Navigate } from "react-router";
+import { Navigate,useLocation } from "react-router";
 import { useFormik } from "formik";
 import styled from "styled-components";
 import { useDispatch, useSelector } from "react-redux";
@@ -28,6 +28,8 @@ const formSchema = Yup.object({
 });
 
 export default function UploadProfilePhoto() {
+    const location = useLocation();
+    const banner = location?.state?.banner
     const dispatch = useDispatch();
     //formik
     const formik = useFormik({
@@ -35,7 +37,15 @@ export default function UploadProfilePhoto() {
             image: "",
         },
         onSubmit: values => {
-            dispatch(uploadProfilePhotoAction(values));
+            const data = {
+                image: values.image,
+                banner:true
+            }
+            if(banner){
+                dispatch(uploadProfilePhotoAction(data));
+            }else{
+                dispatch(uploadProfilePhotoAction(values,));
+            }
         },
         validationSchema: formSchema,
     });
@@ -48,7 +58,7 @@ export default function UploadProfilePhoto() {
         <div className="min-h-screen bg-gray-900 flex flex-col justify-center py-12 sm:px-6 lg:px-8">
             <div className="sm:mx-auto sm:w-full sm:max-w-md">
                 <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-300">
-                    Upload profile photo
+                   {banner? 'Upload banner photo' : 'Upload profile photo'}
                 </h2>
                 {/* Displya err here */}
             </div>
