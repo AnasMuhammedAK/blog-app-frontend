@@ -162,7 +162,7 @@ function CreatePost() {
                                     value={formik?.values?.description}
                                     onChange={formik?.handleChange("description")}
                                     onBlur={formik?.handleBlur("description")}
-                                    config={config}
+                                   // config={config}
                                     
                                     className="rounded-lg appearance-none block w-full py-3 px-3 text-base text-center leading-tight text-gray-600 bg-transparent focus:bg-transparent  border border-gray-200 focus:border-gray-500  focus:outline-none"
                                     type="text"

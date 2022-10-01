@@ -81,8 +81,8 @@ const PostDetails = () => {
                                     </div>
                                 </div>
                                 {/* Post description */}
-                                <div class="max-w-full mx-auto">
-                                    <div className="text-white" dangerouslySetInnerHTML={sanitizedData(postDetails?.description)} >
+                                <div class="max-w-[80%] mx-auto">
+                                    <div className="text-white text-left" dangerouslySetInnerHTML={sanitizedData(postDetails?.description)} >
                                     </div>
                                     {/* Show delete and update btn if created user */}
                                     {canEditAndDelete ? <p class="flex items-center justify-center py-3">

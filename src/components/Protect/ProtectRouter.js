@@ -6,8 +6,7 @@ import { Navigate, Outlet, useLocation } from 'react-router-dom'
 function ProtectRouter({allowedRoles}) {
     const {userAuth} = useSelector(user => user?.users)
     const location = useLocation()
-  return (
-    //  
+  return (  
     userAuth?.roles?.find(role => allowedRoles?.includes(role))
     ? <Outlet />
     : userAuth

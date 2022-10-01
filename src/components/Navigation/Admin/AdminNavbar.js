@@ -10,16 +10,16 @@ import {
   LogoutIcon,
 } from "@heroicons/react/outline";
 import { PlusIcon } from "@heroicons/react/solid";
-import { useDispatch,useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { logoutUserAction } from "../../../redux/slices/users/usersSlice";
 
 const navigation = [
   { name: "Home", href: "/home", current: true },
   { name: "Create", href: "/create-post", current: false },
   { name: "Posts", href: "/posts", current: false },
-  { name: "Authors", href: "/users", current: false },
+  { name: "Users", href: "/users-list", current: false },
   { name: "Add Category", href: "/add-category", current: false },
-  { name: "Category List", href: "/category-list", current: false },
+  { name: "Categories", href: "/category-list", current: false },
 ];
 
 function classNames(...classes) {
@@ -28,13 +28,13 @@ function classNames(...classes) {
 
 const AdminNavbar = () => {
   const dispatch = useDispatch()
-const { userAuth } = useSelector(state => state?.users)
+  const { userAuth } = useSelector(state => state?.users)
   //Navigation
   const userNavigation = [
     { name: "Your Profile", href: `/profile/${userAuth?._id}` },
     { name: "Change your password", href: "/update-password" },
   ];
-  return ( 
+  return (
     <Disclosure as="nav" className="fixed top-0 right-0 left-0 z-10 bg-gray-800 py-3">
       {({ open }) => (
         <>
@@ -54,7 +54,7 @@ const { userAuth } = useSelector(state => state?.users)
                 </div>
                 <div className="flex-shrink-0 flex items-center">
                   {/* Logo */}
-                  <img className="h-20 w-25 "  src={Logo}/>
+                  <img className="h-20 w-25 " src={Logo} />
                 </div>
                 <div className="hidden md:ml-6 md:flex md:items-center md:space-x-4">
                   {navigation.map(item => (
@@ -91,7 +91,7 @@ const { userAuth } = useSelector(state => state?.users)
                   </Link>
                   {/* Logout */}
                   <button
-                  onClick={() => dispatch(logoutUserAction())}
+                    onClick={() => dispatch(logoutUserAction())}
                     type="button"
                     className="relative inline-flex items-center mx-2 px-4 py-2 border shadow-sm text-sm font-medium rounded-md text-white bg-transparent hover:bg-gray-700 focus:outline-none focus:ring-2   focus:ring-green-400"
 
@@ -109,7 +109,7 @@ const { userAuth } = useSelector(state => state?.users)
                     {({ open }) => (
                       <>
                         <div>
-                          <Menu.Button className="bg-gray-800 flex text-sm rounded-full focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-800 focus:ring-white">
+                          <Menu.Button className="bg-gray-800  flex text-sm rounded-full focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-800 focus:ring-white">
                             <span className="sr-only">Open user menu</span>
                             <img
                               className="h-8 w-8 rounded-full"
@@ -130,7 +130,7 @@ const { userAuth } = useSelector(state => state?.users)
                         >
                           <Menu.Items
                             static
-                            className="origin-top-right absolute right-0 mt-2 w-48 rounded-md shadow-lg py-1 bg-white ring-1 ring-black ring-opacity-5 focus:outline-none"
+                            className=" origin-top-right absolute right-0 mt-2 w-48 rounded-md shadow-lg py-1 bg-white ring-1 ring-black ring-opacity-5 focus:outline-none"
                           >
                             {userNavigation.map(item => (
                               <Menu.Item key={item.name}>

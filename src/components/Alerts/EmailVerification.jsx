@@ -7,7 +7,7 @@ export default function EmailVerificationWarning() {
 	const dispatch=useDispatch()
 
 	return (
-		<div className="bg-red-500 border-l-4 border-yellow-400 p-2 mt-[88px]">
+		<div className="absolute top-0 left-0 right-0 bg-red-500 border-l-4 border-yellow-400 p-2 mt-[88px]">
 			<div className="flex">
 				<div className="flex-shrink-0">
 					<ExclamationIcon

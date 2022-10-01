@@ -22,7 +22,9 @@ import UploadProfilePhoto from './components/User/profile/AddImage';
 import UpdateProfileForm from './components/User/profile/UpdateProfile';
 import SendEmail from './components/sendMail/SendMail';
 import AccountVerified from './components/Alerts/AccountVerified';
-
+import UsersList from './components/User/usersList/UsersList';
+import UpdatePassword from './components/Password/UpdatePassword';
+UsersList
 
 const ROLES = {
   Admin: "Admin",
@@ -53,6 +55,7 @@ function App() {
             <Route path='add-category' element={<AddNewCategory />} />
             <Route path='category-list' element={<CategoryList />} />
             <Route path='update-category/:id' element={<UpdateCategory />} />
+            <Route path='/users-list' element={<UsersList />} />
           </Route>
 
           {/* Can Access Admin and Blogger */}
@@ -63,7 +66,8 @@ function App() {
             <Route path='upload-profile-photo' element={<UploadProfilePhoto />} />
             <Route path='update-profile/:id' element={<UpdateProfileForm />} />
             <Route path='send-mail' element={<SendEmail />} />
-            <Route path='verify-account/:token' element={<AccountVerified />}/>
+            <Route path='verify-account/:token' element={<AccountVerified />} />
+            <Route path='update-password' element={<UpdatePassword />} />
           </Route>
 
         </Routes>

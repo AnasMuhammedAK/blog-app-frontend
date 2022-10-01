@@ -12,6 +12,7 @@ import { MailIcon, EyeIcon } from "@heroicons/react/solid";
 import { userProfileAction, followUserAction, unFollowUserAction } from "../../../redux/slices/users/usersSlice";
 import { useDispatch, useSelector } from "react-redux";
 import LoadingSpinner from "../../LoadingSpinner/LoadingSpinner";
+import { number } from "yup/lib/locale";
 
 export default function Profile() {
     const { id } = useParams()
@@ -36,9 +37,12 @@ export default function Profile() {
     })
     const [data, setData] = useState([])
     const [displayData, setDisplayData] = useState('My Followers')
+    const [number, setNumber] = useState(0)
     useEffect(() => {
         dispatch(userProfileAction(id))
+
     }, [dispatch, id, followed, unFollowed])
+
     return (
         <>
             {/* {profileLoading ? <LoadingSpinner /> : */}
@@ -55,7 +59,7 @@ export default function Profile() {
                         </span>}
                     </div>
                     {/* Static sidebar for desktop */}
-                    <div className="flex flex-col min-w-0 flex-1 overflow-hidden  mt-20">
+                    <div className="flex flex-col min-w-0 flex-1 overflow-hidden">
                         <div className="flex-1 relative z-0 flex overflow-hidden">
                             <main className="flex-1 relative z-0 overflow-y-auto focus:outline-none xl:order-last">
                                 <article>
@@ -85,9 +89,8 @@ export default function Profile() {
                                                 </div>}
 
                                             </p>
-
                                             <img
-                                                className="h-40 w-full object-cover lg:h-64"
+                                                className="h-40 w-full object-cover lg:h-64 mt-20"
                                                 src={profile?.bannerPhoto}
                                                 alt={profile?.fullName}
                                             />
@@ -117,6 +120,7 @@ export default function Profile() {
                                                                 onClick={() => {
                                                                     setData(profile?.viewedBy)
                                                                     setDisplayData('Who Viewed My Profile')
+                                                                    setNumber(profile?.viewedBy?.length)
                                                                 }}
                                                                 className="cursor-pointer   text-blue-600 mt-2 mb-2 py-1  px-2 border rounded-lg hover:bg-gray-100  focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-pink-500    ">
                                                                 {profile?.viewedBy?.length} Profile View
@@ -126,6 +130,7 @@ export default function Profile() {
                                                                 onClick={() => {
                                                                     setData(profile?.followers)
                                                                     setDisplayData('My Followers')
+                                                                    setNumber(profile?.followers?.length)
                                                                 }}
                                                                 className="cursor-pointer  text-blue-600 mt-2 mb-2 py-1  px-2 border rounded-lg hover:bg-gray-100  focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-pink-500 ">
 
@@ -135,6 +140,7 @@ export default function Profile() {
                                                                 onClick={() => {
                                                                     setData(profile?.following)
                                                                     setDisplayData('Folloing Profiles')
+                                                                    setNumber(profile?.following?.length)
                                                                 }}
                                                                 className="cursor-pointer  text-blue-600 mt-2 mb-2 py-1  px-2 border rounded-lg hover:bg-gray-100  focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-pink-500 ">
 
@@ -243,63 +249,71 @@ export default function Profile() {
                                     <div className="flex justify-center place-items-start flex-wrap  md:mb-0 m-10 border-2 bg-gray-50 rounded-xl">
                                         <div className="w-full md:w-1/3 px-10 mb-4 md:mb-0  ">
                                             <h1 className="text-center font-serif  px-10 text-xl mt-6 mb-6">
-                                                {displayData} : {data?.length ? data?.length : profile?.followers?.length}
+                                                {displayData} : {number ? number : displayData === 'My Followers' ? profile?.followers?.length : 0}
                                             </h1>
                                             {/* Who view my post */}
                                             <div className="bg-white p-10 border-none rounded-xl mb-10">
-                                            <ul className="">
-                                                {data?.length <= 0 ? (
-                                                    profile?.followers?.map(user => (
-                                                        <li>
-                                                            <Link to={`/profile/${user?._id}`}>
-                                                                <div className="flex mb-2 items-center space-x-4 lg:space-x-6">
-                                                                    <img
-                                                                        className="w-16 h-16 rounded-full lg:w-20 lg:h-20"
-                                                                        src={user?.profilePhoto}
-                                                                        alt={user?.fullName}
-                                                                    />
-                                                                    <div className="font-medium text-lg leading-6 space-y-1 flex">
-                                                                        <h3>
-                                                                            {user?.fullName}
-                                                                        </h3>
-                                                                        <p className="text-indigo-600 ">
-                                                                            {user?.accountType ? <FcApproval /> : null}
-                                                                        </p>
-                                                                    </div>
-                                                                </div>
-                                                            </Link>
-                                                        </li>
-                                                    ))
-                                                ) : (
-                                                    data?.map(user => (
-                                                        <li>
-                                                            <Link to={`/profile/${user?._id}`}>
-                                                                <div className="flex mb-2 items-center space-x-4 lg:space-x-6">
-                                                                    <img
-                                                                        className="w-16 h-16 rounded-full lg:w-20 lg:h-20"
-                                                                        src={user?.profilePhoto}
-                                                                        alt={user?.fullName}
-                                                                    />
-                                                                    <div className="font-medium text-lg leading-6 space-y-1 flex">
-                                                                        <h3>
-                                                                            {user?.fullName}
-                                                                        </h3>
-                                                                        <p className="text-indigo-600 ">
-                                                                            {user?.accountType ? <FcApproval /> : null}
-                                                                        </p>
-                                                                    </div>
-                                                                </div>
-                                                            </Link>
-                                                        </li>
-                                                    ))
-                                                )}
-                                            </ul>
+                                                <ul className="">
+                                                    {data?.length <= 0 && displayData === 'My Followers' ?
+                                                        (
+                                                            profile?.followers?.map(user => (
+                                                                <li>
+                                                                    <Link to={`/profile/${user?._id}`}>
+                                                                        <div className="flex mb-2 items-center space-x-4 lg:space-x-6">
+                                                                            <img
+                                                                                className="w-16 h-16 rounded-full lg:w-20 lg:h-20"
+                                                                                src={user?.profilePhoto}
+                                                                                alt={user?.fullName}
+                                                                            />
+                                                                            <div className="font-medium text-lg leading-6 space-y-1 ">
+                                                                                <h3 className="flex items-center ">
+                                                                                    {user?.fullName} {user?.accountType ? <FcApproval /> : null}
+                                                                                </h3>
+                                                                                {user?.isAccountVerified ?
+                                                                                    <span className="inline-flex  items-center px-3 text-black  rounded-lg text-[12px] font-medium bg-green-200 hover:bg-green-600 ">
+                                                                                        Verified Account
+                                                                                    </span> : <span className="inline-flex  items-center px-3 text-black  rounded-lg text-[12px] font-medium bg-red-600 ">
+                                                                                        Unverified Account
+                                                                                    </span>}
+                                                                            </div>
+                                                                        </div>
+
+                                                                    </Link>
+                                                                    <hr className="my-3 opacity-50" />
+                                                                </li>
+                                                            ))
+                                                        ) : data?.length <= 0 && displayData !== 'My Followers' ? "No Users" :
+                                                            (
+                                                                data?.map(user => (
+                                                                    <li>
+                                                                        <Link to={`/profile/${user?._id}`}>
+                                                                            <div className="flex mb-2 items-center space-x-4 lg:space-x-6">
+                                                                                <img
+                                                                                    className="w-16 h-16 rounded-full lg:w-20 lg:h-20"
+                                                                                    src={user?.profilePhoto}
+                                                                                    alt={user?.fullName}
+                                                                                />
+                                                                                <div className="font-medium text-lg leading-6 space-y-1 flex">
+                                                                                    <h3>
+                                                                                        {user?.fullName}
+                                                                                    </h3>
+                                                                                    <p className="text-indigo-600 ">
+                                                                                        {user?.accountType ? <FcApproval /> : null}
+                                                                                    </p>
+                                                                                </div>
+                                                                            </div>
+                                                                        </Link>
+                                                                        <hr className="my-3 opacity-50" />
+                                                                    </li>
+                                                                ))
+                                                            )}
+                                                </ul>
                                             </div>
                                         </div>
                                         {/* All my Post */}
                                         <div className="w-full md:w-2/3 px-4 mb-4 md:mb-0 ">
                                             <h1 className="text-center font-serif px-10 text-xl mt-6 mb-6 ">
-                                                My Post - {profile?.posts?.length}
+                                                My Post : {profile?.posts?.length}
                                             </h1>
                                             {/* Loop here */}
                                             {profile?.posts?.length <= 0 ? (

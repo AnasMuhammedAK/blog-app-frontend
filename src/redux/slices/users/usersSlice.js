@@ -55,14 +55,14 @@ export const uploadProfilePhotoAction = createAsyncThunk(
     async (userImage, { rejectWithValue, getState, dispatch }) => {
         try {
             const formData = new FormData();
-            formData.append("image",userImage?.image);
-            if(userImage?.banner){
+            formData.append("image", userImage?.image);
+            if (userImage?.banner) {
                 const { data } = await privateAxios.put(`/api/users/banner-photo-upload`, formData);
-               if(data.isSuccess) localStorage.setItem('userInfo', JSON.stringify(data))
+                if (data.isSuccess) localStorage.setItem('userInfo', JSON.stringify(data))
                 return data;
-            }else{
+            } else {
                 const { data } = await privateAxios.put(`/api/users/profile-photo-upload`, formData);
-                if(data.isSuccess) localStorage.setItem('userInfo', JSON.stringify(data))
+                if (data.isSuccess) localStorage.setItem('userInfo', JSON.stringify(data))
                 return data;
             }
         } catch (error) {
@@ -129,6 +129,72 @@ export const unFollowUserAction = createAsyncThunk(
             return data;
         } catch (error) {
             if (!error?.response) throw error;
+            return rejectWithValue(error?.response?.data);
+        }
+    }
+);
+// update Password
+export const updatePasswordAction = createAsyncThunk("password/update",
+    async (password, { rejectWithValue, getState, dispatch }) => {
+        try {
+            const pass = {
+                currentPassword : password?.currentPassword,
+                newPassword : password?.newPassword
+            }
+            console.log(pass,"hhhhhh");
+            const { data } = await privateAxios.put(`/api/users/password`, pass);
+            // dispatch
+            dispatch(resetPasswordAction());
+            return data;
+        } catch (error) {
+            if (!error?.response) {
+                throw error;
+            }
+            return rejectWithValue(error?.response?.data);
+        }
+    }
+)
+// Fetch All user
+export const fetchUsersAction = createAsyncThunk("users/list",
+    async (_, { rejectWithValue, getState, dispatch }) => {
+        try {
+            const { data } = await privateAxios.get(`/api/users`);
+            console.log(data)
+            return data;
+        } catch (error) {
+            if (!error?.response) {
+                throw error;
+            }
+            return rejectWithValue(error?.response?.data);
+        }
+    }
+);
+// Block  User user
+export const blockUserAction = createAsyncThunk("users/block-user",
+    async (id, { rejectWithValue, getState, dispatch }) => {
+        try {
+            const { data } = await privateAxios.put(
+                `/api/admin/block/${id}`, {});
+            return data;
+        } catch (error) {
+            if (!error?.response) {
+                throw error;
+            }
+            return rejectWithValue(error?.response?.data);
+        }
+    }
+);
+// UnBlock  User user
+export const unBlockUserAction = createAsyncThunk("users/unblock-user",
+    async (id, { rejectWithValue, getState, dispatch }) => {
+        try {
+            const { data } = await privateAxios.put(
+                `/api/admin/unblock/${id}`, {});
+            return data;
+        } catch (error) {
+            if (!error?.response) {
+                throw error;
+            }
             return rejectWithValue(error?.response?.data);
         }
     }
@@ -264,6 +330,27 @@ const usersSlice = createSlice({
                 state.appErr = action?.payload?.message;
                 state.serverErr = action?.error?.message;
             })
+            // update Password
+            .addCase(updatePasswordAction.pending, (state, action) => {
+                state.loading = true;
+                state.appErr = undefined;
+                state.serverErr = undefined;
+            })
+            .addCase(resetPasswordAction, (state, action) => {
+                state.isPasswordUpdated = true;
+            })
+            .addCase(updatePasswordAction.fulfilled, (state, action) => {
+                state.loading = false;
+                state.passwordUpdated = action?.payload;
+                state.isPasswordUpdated = false;
+                state.appErr = undefined;
+                state.serverErr = undefined;
+            })
+            .addCase(updatePasswordAction.rejected, (state, action) => {
+                state.loading = false;
+                state.appErr = action?.payload?.message;
+                state.serverErr = action?.error?.message;
+            })
             // fetch user Details
             .addCase(fetchUserDetailsAction.pending, (state, action) => {
                 state.loading = true;
@@ -319,6 +406,59 @@ const usersSlice = createSlice({
                 state.unfollowLoading = false;
                 state.unFollowedAppErr = action?.payload?.message;
                 state.unfollowServerErr = action?.error?.message;
+            })
+            // Block user
+            .addCase(blockUserAction.pending, (state, action) => {
+                state.loading = true;
+                state.appErr = undefined;
+                state.serverErr = undefined;
+            })
+            .addCase(blockUserAction.fulfilled, (state, action) => {
+                state.loading = false;
+                state.block = action?.payload;
+                state.appErr = undefined;
+                state.serverErr = undefined;
+            })
+            .addCase(blockUserAction.rejected, (state, action) => {
+                state.loading = false;
+                state.appErr = action?.payload?.message;
+                state.serverErr = action?.error?.message;
+            })
+
+            // UnBlock user
+            .addCase(unBlockUserAction.pending, (state, action) => {
+                state.loading = true;
+                state.appErr = undefined;
+                state.serverErr = undefined;
+            })
+            .addCase(unBlockUserAction.fulfilled, (state, action) => {
+                state.loading = false;
+                state.unblock = action?.payload;
+                state.appErr = undefined;
+                state.serverErr = undefined;
+            })
+            .addCase(unBlockUserAction.rejected, (state, action) => {
+                state.loading = false;
+                state.appErr = action?.payload?.message;
+                state.serverErr = action?.error?.message;
+            })
+
+            // fetch All user
+            .addCase(fetchUsersAction.pending, (state, action) => {
+                state.loading = true;
+                state.appErr = undefined;
+                state.serverErr = undefined;
+            })
+            .addCase(fetchUsersAction.fulfilled, (state, action) => {
+                state.loading = false;
+                state.userList = action?.payload;
+                state.appErr = undefined;
+                state.serverErr = undefined;
+            })
+            .addCase(fetchUsersAction.rejected, (state, action) => {
+                state.loading = false;
+                state.appErr = action?.payload?.message;
+                state.serverErr = action?.error?.message;
             })
 
     },

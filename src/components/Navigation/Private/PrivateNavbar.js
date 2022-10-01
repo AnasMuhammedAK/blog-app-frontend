@@ -12,12 +12,7 @@ import { PlusIcon, LogoutIcon } from "@heroicons/react/solid";
 import { useDispatch, useSelector } from "react-redux";
 import { logoutUserAction } from "../../../redux/slices/users/usersSlice";
 
-const navigation = [
-  { name: "Home", href: "/home", current: true },
-  { name: "Create", href: "/create-post", current: false },
-  { name: "Posts", href: "/posts", current: false },
-  { name: "Authors", href: "/users", current: false },
-];
+
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
@@ -30,7 +25,12 @@ const PrivateNavbar = ({ isLogin }) => {
     { name: "Your Profile", href: `/profile/${userAuth?._id}` },
     { name: "Change your password", href: "/update-password" },
   ]
- 
+  const navigation = [
+    { name: "Home", href: "/home", current: true },
+    { name: "Create", href: "/create-post", current: false },
+    { name: "Posts", href: "/posts", current: false },
+    { name: "Profile", href: `/profile/${userAuth?._id}`, current: false },
+  ];
   return (
     <Disclosure as="nav" className="fixed top-0 right-0 left-0 z-10 bg-black py-3">
       {({ open }) => (

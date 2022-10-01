@@ -12,8 +12,8 @@ const formSchema = Yup.object({
 
 const AddComment = ({ postId, description, edit, commentId }) => {
     const [newDescription, setNewDescription] = useState(description)
-    const user = useSelector(state => state?.users);
-    const { userAuth } = user;
+    const { userAuth } = useSelector(state => state?.users);
+    const { appErr, serverErr } = useSelector(state => state?.comments)
     //dispatch
     const dispatch = useDispatch();
     const navigate = useNavigate()
@@ -37,7 +37,7 @@ const AddComment = ({ postId, description, edit, commentId }) => {
         },
         validationSchema: formSchema,
     });
-    const handleChange = (e) =>{
+    const handleChange = (e) => {
         setNewDescription(e.target.value)
     }
     const handleSubmit = (e) => {
@@ -51,6 +51,9 @@ const AddComment = ({ postId, description, edit, commentId }) => {
     return (
         <>
             {!edit ? <div className="flex flex-col justify-center items-center">
+                {appErr || serverErr ? (
+                    <h1 className="text-red-500 items-center"> {serverErr}  {appErr}</h1>
+                ) : null}
                 <form
                     onSubmit={formik.handleSubmit}
                     className="mt-1 flex m-auto"
@@ -84,7 +87,7 @@ const AddComment = ({ postId, description, edit, commentId }) => {
                     >
                         <input
 
-                            value={newDescription? newDescription : description}
+                            value={newDescription ? newDescription : description}
                             onChange={handleChange}
                             type="text"
                             name="text"
