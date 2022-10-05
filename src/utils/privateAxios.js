@@ -1,6 +1,6 @@
 import axios from 'axios'
 import jwt_decode from "jwt-decode";
-const baseURL ='https://speedcode-blogs.herokuapp.com' // 'http://localhost:5000'
+const baseURL = 'http://localhost:5000' //'https://speedcode-blogs.herokuapp.com'
 
 
 const axiosInstance = axios.create({baseURL: baseURL})
@@ -23,7 +23,7 @@ axiosInstance.interceptors.request.use(
         const decodedToken = jwt_decode(accessToken);
         if (decodedToken.exp * 1000 < currentDate.getTime()) {
             console.log('Expired access token..')
-            const data = await generateRefreshToken();
+            const data = await generateRefreshToken()
             config.headers["Authorization"] = "Bearer " + data.accessToken;
             return config
         } else {

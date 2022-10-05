@@ -27,7 +27,6 @@ const login = async (userData) => {
         localStorage.setItem('tokens', JSON.stringify({accessToken:data.accessToken, refreshToken:data.refreshToken}))
         return data
     }
-    
 }
 //LOGOUT USER
 //-------------------------------------------------------------
@@ -39,8 +38,6 @@ const logout = async (refreshToken) => {
    } 
     return 
 }
-
-
 
 const usersService = {
     register,

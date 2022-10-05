@@ -39,7 +39,6 @@ const Login = () => {
    const { loading, appErr, serverErr, userAuth } = storeData
 
  useEffect(() => {
-
    //redired when registered
    if(userAuth){
     navigate(from)

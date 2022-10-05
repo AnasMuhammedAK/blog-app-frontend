@@ -1,6 +1,6 @@
 import axios from 'axios'
 
-const baseURL = 'https://speedcode-blogs.herokuapp.com' // 'http://localhost:5000'
+const baseURL = 'http://localhost:5000' //'https://speedcode-blogs.herokuapp.com'
 
 const publicAxios = axios.create({baseURL})
 

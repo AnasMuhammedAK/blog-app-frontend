@@ -10,12 +10,12 @@ const deletePostReset = createAction("post/delete")
 export const createpostAction = createAsyncThunk("post/created",
   async (post, { rejectWithValue, getState, dispatch }) => {
     try {
-      const formData = new FormData();
-      formData.append("title", post?.title);
-      formData.append("description", post?.description);
-      formData.append("category", post?.category);
-      formData.append("image", post?.image);
-      const { data } = await privateAxios.post(`/api/posts/create`, formData);
+      const formData = new FormData()
+      formData.append("title", post?.title)
+      formData.append("description", post?.description)
+      formData.append("category", post?.category)
+      formData.append("image", post?.image)
+      const { data } = await privateAxios.post(`/api/posts/create`, formData)
       //dispatch action
       dispatch(resetPost());
       return data;
@@ -96,6 +96,20 @@ export const toggleAddDisLikesToPost = createAsyncThunk('post/dislike',
       return rejectWithValue(message)
     }
   })
+//search
+export const searchPostAction = createAsyncThunk(
+  "post/search",
+  async (query, { rejectWithValue, getState, dispatch }) => {
+    try {
+      const { data } = await publicAxios.get(`/api/posts/search/?q=${query}`)
+      return data;
+    } catch (error) {
+      if (!error?.response) throw error
+      let message = (error?.response?.data?.message) ? (error?.response?.data?.message) : (error?.response?.data)
+      return rejectWithValue(message)
+    }
+  }
+);
 export const deletePostAction = createAsyncThunk(
   "post/delete",
   async (postId, { rejectWithValue, getState, dispatch }) => {
@@ -170,6 +184,21 @@ const postSlice = createSlice({
     builder.addCase(fetchPostsAction.rejected, (state, action) => {
       state.loading = false;
       state.appErr = action?.payload?.message;
+      state.serverErr = action?.error?.message;
+    });
+    //fetch posts
+    builder.addCase(searchPostAction.pending, (state, action) => {
+      state.loading = true;
+    });
+    builder.addCase(searchPostAction.fulfilled, (state, action) => {
+      state.postLists = action?.payload;
+      state.loading = false;
+      state.appErr = undefined;
+      state.serverErr = undefined;
+    });
+    builder.addCase(searchPostAction.rejected, (state, action) => {
+      state.loading = false;
+      state.appErr = action?.payload
       state.serverErr = action?.error?.message;
     });
     // Fetch Post Details

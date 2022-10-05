@@ -12,7 +12,7 @@ import { MailIcon, EyeIcon } from "@heroicons/react/solid";
 import { userProfileAction, followUserAction, unFollowUserAction } from "../../../redux/slices/users/usersSlice";
 import { useDispatch, useSelector } from "react-redux";
 import LoadingSpinner from "../../LoadingSpinner/LoadingSpinner";
-import { number } from "yup/lib/locale";
+
 
 export default function Profile() {
     const { id } = useParams()
@@ -30,11 +30,9 @@ export default function Profile() {
 
 
     const isLoggedUser = userAuth?._id === id
-    let isFollowing;
-    profile?.followers?.forEach((row) => {
-        if (row?._id.toString() === userAuth?._id.toString()) isFollowing = true
-        else isFollowing = false
-    })
+    const isFollowing = profile?.followers?.find((row) => {
+        return row?._id.toString() === userAuth?._id.toString()
+     })
     const [data, setData] = useState([])
     const [displayData, setDisplayData] = useState('My Followers')
     const [number, setNumber] = useState(0)
