@@ -4,7 +4,7 @@ import publicAxios from '../../../utils/publicAxios'
 
 //action to redirect
 const resetPost = createAction("category/reset")
-const resetPostEdit = createAction("post/reset")
+const saveReset = createAction("post/save-reset")
 const deletePostReset = createAction("post/delete")
 //Create Post action
 export const createpostAction = createAsyncThunk("post/created",
@@ -49,6 +49,7 @@ export const fetchPostsAction = createAsyncThunk(
     try {
       if (category) {
         const { data } = await publicAxios.get(`/api/posts?category=${category}`);
+        dispatch(saveReset())
         return data;
       } else {
         const { data } = await publicAxios.get(`/api/posts`);
@@ -65,6 +66,42 @@ export const fetchPostDetailsAction = createAsyncThunk('post/post-details',
   async (id, { rejectWithValue, getState, dispatch }) => {
     try {
       const { data } = await publicAxios.get(`/api/posts/${id}`)
+      return data;
+    } catch (error) {
+      if (!error?.response) throw error;
+      let message = (error?.response?.data?.message) ? (error?.response?.data?.message) : (error?.response?.data)
+      return rejectWithValue(message)
+    }
+  })
+// save post 
+export const savePostAction = createAsyncThunk('post/post-save',
+  async (id, { rejectWithValue, getState, dispatch }) => {
+    try {
+      const { data } = await privateAxios.post(`/api/posts/save`, { id })
+      return data;
+    } catch (error) {
+      if (!error?.response) throw error;
+      let message = (error?.response?.data?.message) ? (error?.response?.data?.message) : (error?.response?.data)
+      return rejectWithValue(message)
+    }
+  })
+// save post 
+export const savedPostsAction = createAsyncThunk('post/post-saved-list',
+  async (id, { rejectWithValue, getState, dispatch }) => {
+    try {
+      const { data } = await privateAxios.get(`/api/posts/saved-list`)
+      return data;
+    } catch (error) {
+      if (!error?.response) throw error;
+      let message = (error?.response?.data?.message) ? (error?.response?.data?.message) : (error?.response?.data)
+      return rejectWithValue(message)
+    }
+  })
+// delete save post 
+export const deleteSavedPostsAction = createAsyncThunk('post/delete-post-saved',
+  async (id, { rejectWithValue, getState, dispatch }) => {
+    try {
+      const { data } = await privateAxios.delete(`/api/posts/saved/${id}`)
       return data;
     } catch (error) {
       if (!error?.response) throw error;
@@ -128,7 +165,9 @@ export const deletePostAction = createAsyncThunk(
 //slice
 const postSlice = createSlice({
   name: "post",
-  initialState: {},
+  initialState: {
+    savedList: []
+  },
   reducers: {
     reset: (state) => {
       state.isCreated = false;
@@ -175,6 +214,10 @@ const postSlice = createSlice({
     builder.addCase(fetchPostsAction.pending, (state, action) => {
       state.loading = true;
     });
+    builder.addCase(saveReset, (state, action) => {
+      state.saved = false;
+      state.deleted = false;
+    });
     builder.addCase(fetchPostsAction.fulfilled, (state, action) => {
       state.postLists = action?.payload;
       state.loading = false;
@@ -188,16 +231,16 @@ const postSlice = createSlice({
     });
     //fetch posts
     builder.addCase(searchPostAction.pending, (state, action) => {
-      state.loading = true;
+      state.searchLoading = true;
     });
     builder.addCase(searchPostAction.fulfilled, (state, action) => {
       state.postLists = action?.payload;
-      state.loading = false;
+      state.searchLoading = false;
       state.appErr = undefined;
       state.serverErr = undefined;
     });
     builder.addCase(searchPostAction.rejected, (state, action) => {
-      state.loading = false;
+      state.searchLoading = false;
       state.appErr = action?.payload
       state.serverErr = action?.error?.message;
     });
@@ -213,6 +256,55 @@ const postSlice = createSlice({
     })
     builder.addCase(fetchPostDetailsAction.rejected, (state, action) => {
       state.loading = false;
+      state.appErr = action?.payload
+      state.serverErr = action?.error?.message
+    })
+    // save Post 
+    builder.addCase(savePostAction.pending, (state, action) => {
+      state.saveLoading = true;
+    })
+    builder.addCase(savePostAction.fulfilled, (state, action) => {
+      state.saved = true
+      state.deleted = false
+      state.savedPost = action?.payload;
+      state.saveLoading = false;
+      state.appErr = undefined;
+      state.serverErr = undefined;
+    })
+    builder.addCase(savePostAction.rejected, (state, action) => {
+      state.saveLoading = false;
+      state.appErr = action?.payload
+      state.serverErr = action?.error?.message
+    })
+    // save Post 
+    builder.addCase(savedPostsAction.pending, (state, action) => {
+      state.loading = true;
+    })
+    builder.addCase(savedPostsAction.fulfilled, (state, action) => {
+      state.savedList = action?.payload;
+      state.loading = false;
+      state.appErr = undefined;
+      state.serverErr = undefined;
+    })
+    builder.addCase(savedPostsAction.rejected, (state, action) => {
+      state.loading = false;
+      state.appErr = action?.payload
+      state.serverErr = action?.error?.message
+    })
+    // delete save Post 
+    builder.addCase(deleteSavedPostsAction.pending, (state, action) => {
+      state.saveLoading = true;
+    })
+    builder.addCase(deleteSavedPostsAction.fulfilled, (state, action) => {
+      state.deleted = true
+      state.saved = false
+      state.savedPost = action?.payload;
+      state.saveLoading = false;
+      state.appErr = undefined;
+      state.serverErr = undefined;
+    })
+    builder.addCase(deleteSavedPostsAction.rejected, (state, action) => {
+      state.saveLoading = false;
       state.appErr = action?.payload
       state.serverErr = action?.error?.message
     })

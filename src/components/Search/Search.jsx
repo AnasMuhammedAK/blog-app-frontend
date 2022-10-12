@@ -6,7 +6,8 @@ function Search() {
     const dispatch = useDispatch()
     const [query, setQuery] = useState('')
     useEffect(() => {
-        if (query.length === 0 || query.length > 2) dispatch(searchPostAction(query))
+        // if (query.length === 0 || query.length > 2) 
+        dispatch(searchPostAction(query))
     }, [query])
     return (
         <>

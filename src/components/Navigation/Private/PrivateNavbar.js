@@ -29,6 +29,7 @@ const PrivateNavbar = ({ isLogin }) => {
     { name: "Home", href: "/home", current: true },
     { name: "Create", href: "/create-post", current: false },
     { name: "Posts", href: "/posts", current: false },
+    { name: "Saved", href: "/saved-posts", current: false },
     { name: "Profile", href: `/profile/${userAuth?._id}`, current: false },
   ];
   return (
